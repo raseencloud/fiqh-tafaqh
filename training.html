@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+<script data-goatcounter="https://islamicfiqhacademy.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة التدريب الفقهي</title>
+
+<script src="qrcode.min.js"></script>
+
+<style>
+body{
+    background:#d1fae5;
+    font-family:Tahoma, Arial;
+    text-align:center;
+    padding:20px;
+}
+
+.main-card{
+    max-width:780px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+    border-top:6px solid #16a34a;
+}
+
+h1{color:#065f46;}
+
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+    font-size:15px;
+}
+
+button{
+    background:#16a34a;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{background:#15803d;}
+
+.question{
+    font-size:22px;
+    font-weight:700;
+    color:#111827;
+    margin:20px 0;
+    line-height:1.8;
+}
+
+.answer{
+    background:#f3f4f6;
+    padding:14px;
+    margin:8px 0;
+    border-radius:10px;
+    cursor:pointer;
+    border:1px solid #d1d5db;
+    font-weight:700;
+    color:#000;
+}
+
+.answer:hover{background:#dcfce7;}
+
+.meta{
+    font-size:13px;
+    color:#166534;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+@media print {
+    body * { visibility: hidden !important; }
+
+    #certificate,
+    #certificate * { visibility: visible !important; }
+
+    #certificate {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    #quiz { display: none !important; }
+}
+</style>
+<base target="_blank">
+</head>
+
+<body>
+
+<div style="display:flex;justify-content:space-between;align-items:center;max-width:780px;margin:0 auto 20px;">
+  <a href="home.html" style="background:#16a34a;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">🏠 العودة للرئيسية</a>
+  <h1 style="margin:0">منصة التدريب الفقهي</h1>
+  <span></span>
+</div>
+
+<div class="main-card">
+
+<input id="candidateName" placeholder="اسم المتدرب">
+
+<select id="categoryFilter">
+    <option value="all">كل التصنيفات</option>
+    <option value="فقه">فقه</option>
+    <option value="عقيدة">عقيدة</option>
+    <option value="توحيد">توحيد</option>
+    <option value="تفسير">تفسير</option>
+    <option value="حديث">حديث</option>
+    <option value="أصول فقه">أصول فقه</option>
+    <option value="لغة عربية">لغة عربية</option>
+    <option value="سيرة">سيرة</option>
+    <option value="منوعات إسلامية">منوعات إسلامية</option>
+</select>
+
+<select id="levelFilter">
+    <option value="all">كل المستويات</option>
+    <option value="سهل">سهل</option>
+    <option value="متوسط">متوسط</option>
+    <option value="صعب">صعب</option>
+</select>
+
+<select id="questionCount">
+    <option value="3" selected>3</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="20">20</option>
+    <option value="30">30</option>
+    <option value="50">50</option>
+    <option value="80">80</option>
+    <option value="100">100</option>
+</select>
+
+</div>
+
+<button onclick="startExam()">ابدأ الاختبار</button>
+
+<div id="quiz"></div>
+
+<div id="certificate" style="display:none; margin-top:20px; padding:25px; border:8px double #166534; border-radius:18px; background:linear-gradient(135deg,#ecfdf5,#ffffff);">
+
+    <h2 style="color:#166534;">شهادة إتمام الاختبار</h2>
+
+    <p>اسم المتدرب: <span id="certName"></span></p>
+    <p>النتيجة: <span id="score"></span> / <span id="total"></span></p>
+    <p>نسبة النجاح: <span id="percent"></span>%</p>
+
+    <p>رقم الشهادة: <span id="id"></span></p>
+
+    <div id="qr"></div>
+
+    <p>ختم واعتماد المدير التنفيذي للمنصة</p>
+</div>
+
+<script>
+"use strict";
+
+/* =========================
+   STATE
+========================= */
+let allQuestions = [];
+let questions = [];
+let current = 0;
+let score = 0;
+let candidateName = "";
+let selectedCount = 5;
+let answered = false;
+let wrongAnswers = [];
+let userAnswers = []; // ✅ FIX: تعريف الإجابات
+
+const MIN_CERT_QUESTIONS = 3;
+
+/* =========================
+   LOAD NAME FROM HOME PAGE
+========================= */
+(function(){
+    const savedName = localStorage.getItem('trainee_name');
+    if(savedName){
+        document.getElementById("candidateName").value = savedName;
+    }
+})();
+
+/* =========================
+   LOAD QUESTIONS
+========================= */
+async function loadQuestions() {
+    try {
+        const res = await fetch(
+            "https://raw.githubusercontent.com/ieashehata1965-netizen/fiqh-tafaqh/main/fiqh-questions.json",
+            { cache: "no-store" }
+        );
+
+        if (!res.ok) throw new Error("HTTP Error: " + res.status);
+
+        const raw = await res.json();
+
+        if (!Array.isArray(raw)) throw new Error("Data not array");
+
+        allQuestions = raw.map(normalize).filter(Boolean);
+
+        selectedCount = Math.min(selectedCount, allQuestions.length);
+        questions = allQuestions.slice(0, selectedCount);
+
+        return true;
+
+    } catch (e) {
+        console.error(e);
+        document.getElementById("quiz").innerHTML = "فشل تحميل الأسئلة";
+        return false;
+    }
+}
+
+/* =========================
+   NORMALIZE
+========================= */
+function normalize(item){
+    if(!item) return null;
+
+    const q = String(item.q ?? "").trim();
+    const a = Array.isArray(item.a) ? item.a : [];
+    const c = Number(item.c);
+
+    if(!q || a.length < 2) return null;
+
+    return {
+        id: item.id,
+        category: item.category || "غير مصنف",
+        level: item.level || "غير محدد",
+        q,
+        a,
+        c: (c >= 0 && c < a.length) ? c : 0
+    };
+}
+
+/* =========================
+   SHUFFLE
+========================= */
+function shuffle(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+/* =========================
+   START EXAM
+========================= */
+window.startExam = async function () {
+
+    candidateName = document.getElementById("candidateName").value.trim();
+
+    if(!candidateName){
+        alert("أدخل الاسم");
+        return;
+    }
+
+    selectedCount = parseInt(document.getElementById("questionCount").value,10) || 5;
+
+    document.getElementById("quiz").innerHTML = "جاري التحميل...";
+
+    const ok = await loadQuestions();
+    if(!ok) return;
+
+    const cat = document.getElementById("categoryFilter").value;
+    const lvl = document.getElementById("levelFilter").value;
+
+    let pool = allQuestions.filter(q =>
+        (cat === "all" || q.category === cat) &&
+        (lvl === "all" || q.level === lvl)
+    );
+
+    questions = shuffle(pool).slice(0, selectedCount);
+
+    current = 0;
+    score = 0;
+    wrongAnswers = [];
+    userAnswers = []; // reset
+
+    showQuestion();
+};
+
+/* =========================
+   SHOW QUESTION
+========================= */
+function showQuestion(){
+
+    answered = false;
+
+    if(current >= questions.length){
+        showResult();
+        return;
+    }
+
+    const q = questions[current];
+
+    let html = "<div class='question'>";
+    html += "<div class='meta'>سؤال " + (current+1) + " من " + questions.length + "</div>";
+    html += "<div>" + q.q + "</div>";
+
+    q.a.forEach((ans,i)=>{
+        html += "<div class='answer' onclick='answer(" + i + ")'>" + ans + "</div>";
+    });
+
+    html += "</div>";
+
+    document.getElementById("quiz").innerHTML = html;
+}
+
+/* =========================
+   ANSWER
+========================= */
+function answer(i){
+
+    if(answered) return;
+    answered = true;
+
+    const q = questions[current];
+    const boxes = document.querySelectorAll(".answer");
+
+    userAnswers[current] = i; // ✅ FIX: تسجيل الإجابة
+
+    if(i === q.c){
+        score++;
+        if(boxes[i]) boxes[i].style.background = "#dcfce7";
+    } else {
+        if(boxes[i]) boxes[i].style.background = "#fee2e2";
+        if(boxes[q.c]) boxes[q.c].style.background = "#dcfce7";
+
+        wrongAnswers.push({
+            question: q.q,
+            yourAnswer: q.a[i],
+            correctAnswer: q.a[q.c]
+        });
+    }
+
+    setTimeout(() => {
+
+        current++;
+        showQuestion(); // ✅ FIX: إصلاح البنية
+
+    }, 300);
+}
+
+/* =========================
+   RESULT
+========================= */
+function showResult(){
+
+    const total = questions?.length || 0;
+    const percent = total ? Math.round((score / total) * 100) : 0;
+
+    const level =
+        percent >= 90 ? "ممتاز" :
+        percent >= 75 ? "جيد جداً" :
+        percent >= 60 ? "جيد" :
+        "يحتاج تطوير";
+
+    // ✅ شرط الشهادة الصحيح (تصحيح رقابي)
+    const MIN_CERT_QUESTIONS = 20;
+
+    const showCertificate =
+        selectedCount >= MIN_CERT_QUESTIONS && percent >= 60;
+
+    let wrongAnswersHTML = "";
+
+    const safeQuestions = Array.isArray(questions) ? questions : [];
+    const safeAnswers = Array.isArray(userAnswers) ? userAnswers : [];
+
+    safeQuestions.forEach((q, index) => {
+
+        const userAnswer = safeAnswers[index];
+        const correct = q?.c;
+        const options = Array.isArray(q?.a) ? q.a : [];
+
+        if(userAnswer !== correct){
+
+            wrongAnswersHTML += `
+                <div style="border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:6px;">
+                    <p><b>السؤال:</b> ${q?.q || "غير متوفر"}</p>
+
+                    <p style="color:#b91c1c;">
+                        إجابتك: ${options[userAnswer] ?? "لم تتم الإجابة"}
+                    </p>
+
+                    <p style="color:#15803d;">
+                        الإجابة الصحيحة: ${options[correct] ?? "غير متوفرة"}
+                    </p>
+                </div>
+            `;
+        }
+    });
+
+    document.getElementById("quiz").innerHTML = `
+        <div>
+            <h2>النتيجة النهائية</h2>
+
+            <p>النتيجة: ${score} / ${total}</p>
+            <p>النسبة: ${percent}%</p>
+            <p>التقييم: ${level}</p>
+
+            <hr>
+
+            <h3>تحليل الأخطاء</h3>
+
+            ${wrongAnswersHTML || "<p style='color:green;'>لا توجد أخطاء 🎯</p>"}
+
+            <hr>
+
+            ${
+                showCertificate
+                ? `<button onclick="printCertificate(${percent})">
+                        طباعة الشهادة
+                   </button>`
+                : `<p style="color:#b91c1c;font-weight:bold;">
+                        لا تتوفر شهادة إلا عند حل 20 سؤالًا فأكثر بنسبة نجاح 60%
+                   </p>`
+            }
+
+            <button onclick="location.reload()">إعادة الاختبار</button>
+        </div>
+    `;
+}
+        function printCertificate(percent){
+
+    const certId = "FIQH-" + Date.now();
+
+    const url =
+        "certificate.html?name=" + encodeURIComponent(candidateName) +
+        "&score=" + score +
+        "&total=" + questions.length +
+        "&id=" + certId;
+
+    window.location.href = url;
+}
+
+</script>
+
+</body>
+</html>
