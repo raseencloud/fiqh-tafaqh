@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إضافة سؤال</title>
+<title>إضافة سؤال - بنك الأسئلة الشرعية</title>
 
 <style>
 body{
-    font-family:Tahoma, Arial;
+    font-family:Tahoma, Arial, sans-serif;
     background:#f0fdf4;
     max-width:850px;
     margin:auto;
@@ -20,10 +20,12 @@ body{
     border-radius:16px;
     border:1px solid #d1fae5;
     box-shadow:0 6px 18px rgba(0,0,0,.08);
+    margin-bottom:20px;
 }
 
 h2{
     color:#14532d;
+    margin-top:0;
 }
 
 input, select, button{
@@ -33,6 +35,8 @@ input, select, button{
     border-radius:10px;
     border:1px solid #d1d5db;
     font-size:15px;
+    font-family:inherit;
+    box-sizing:border-box;
 }
 
 button{
@@ -41,80 +45,99 @@ button{
     border:none;
     cursor:pointer;
     font-weight:bold;
+    transition:background 0.2s;
 }
+
+button:hover{background:#15803d;}
 
 button.secondary{
     background:#6b7280;
+}
+
+button.secondary:hover{
+    background:#4b5563;
+}
+
+button.outline{
+    background:#fff;
+    color:#16a34a;
+    border:2px solid #16a34a;
+}
+
+button.outline:hover{
+    background:#f0fdf4;
 }
 
 .counter{
     margin-top:10px;
     font-weight:bold;
     color:#065f46;
+    padding:10px;
+    background:#ecfdf5;
+    border-radius:8px;
+    text-align:center;
+}
+
+.nav-links{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+    color:#16a34a;
+    text-decoration:none;
+    padding:8px 16px;
+    background:#fff;
+    border-radius:20px;
+    font-size:13px;
+    border:1px solid #d1fae5;
+    transition:all 0.2s;
+}
+
+.nav-links a:hover{
+    background:#16a34a;
+    color:#fff;
+}
+
+.duplicate-warning{
+    background:#fef3c7;
+    color:#92400e;
+    padding:10px;
+    border-radius:8px;
+    margin:8px 0;
+    display:none;
+    font-size:13px;
+}
+
+@media (max-width: 600px){
+    body{padding:10px;}
+    .card{padding:16px;}
 }
 </style>
 
+<base target="_blank">
 </head>
-
 <body>
 
 <script>
+// Security check - must come from admin portal
 if(sessionStorage.getItem("admin_access") !== "granted"){
-    document.body.innerHTML = "<h2 style='text-align:center'>غير مصرح بالدخول</h2>";
+    document.body.innerHTML = "<h2 style='text-align:center;padding:50px;color:#dc2626;'>⛔ غير مصرح بالدخول</h2><p style='text-align:center;'><a href='index.html'>العودة للرئيسية</a></p>";
     throw new Error("Access Denied");
 }
 </script>
-    
-    font-family:Tahoma, Arial;
-    background:#f0fdf4;
-    max-width:850px;
-    margin:auto;
-    padding:20px;
-}
 
-.card{
-    background:#fff;
-    padding:22px;
-    border-radius:16px;
-    border:1px solid #d1fae5;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-h2{ color:#14532d; }
-
-input, select, button{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border-radius:10px;
-    border:1px solid #d1d5db;
-    font-size:15px;
-}
-
-button{
-    background:#16a34a;
-    color:#fff;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-button.secondary{
-    background:#6b7280;
-}
-
-.counter{
-    margin-top:10px;
-    font-weight:bold;
-    color:#065f46;
-}
-</style>
-</head>
-
-<body>
+<div class="nav-links">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="add-question.html">📋 إدارة بنك الأسئلة</a>
+    <a href="https://ieashehata1965-netizen.github.io/Shariah-Training/fiqh-questions.json" target="_blank">📄 ملف JSON</a>
+</div>
 
 <div class="card">
-    <h2>إضافة سؤال جديد</h2>
+    <h2>➕ إضافة سؤال جديد</h2>
 
     <select id="category">
         <option value="">اختر التصنيف</option>
@@ -126,50 +149,52 @@ button.secondary{
         <option value="أصول فقه">أصول فقه</option>
         <option value="لغة عربية">لغة عربية</option>
         <option value="سيرة">سيرة</option>
+        <option value="ثقافة إسلامية">ثقافة إسلامية</option>
+        <option value="منوعات إسلامية">منوعات إسلامية</option>
     </select>
 
     <select id="level">
         <option value="">اختر المستوى</option>
-        <option value="سهل">سهل</option>
-        <option value="متوسط">متوسط</option>
-        <option value="صعب">صعب</option>
+        <option value="سهل">🟢 سهل</option>
+        <option value="متوسط">🟡 متوسط</option>
+        <option value="صعب">🔴 صعب</option>
     </select>
 
     <input id="source" placeholder="المصدر (اختياري)">
     <input id="q" placeholder="السؤال">
 
-    <input id="a1" placeholder="الخيار 1">
-    <input id="a2" placeholder="الخيار 2">
-    <input id="a3" placeholder="الخيار 3">
-    <input id="a4" placeholder="الخيار 4">
+    <input id="a1" placeholder="الخيار 1 (أ)">
+    <input id="a2" placeholder="الخيار 2 (ب)">
+    <input id="a3" placeholder="الخيار 3 (ج)">
+    <input id="a4" placeholder="الخيار 4 (د)">
 
     <input id="c" type="number" min="0" max="3" placeholder="رقم الإجابة الصحيحة (0-3)">
 
-    <button onclick="addQuestion()">إضافة السؤال</button>
-    <button onclick="downloadJSON()">تحميل JSON</button>
-    <button class="secondary" onclick="clearForm()">مسح</button>
-    
-    <button onclick="addQuestion()">إضافة السؤال</button>
-<button onclick="downloadJSON()">تحميل JSON</button>
-<button class="secondary" onclick="clearForm()">مسح</button>
+    <div class="duplicate-warning" id="dupWarn">
+        ⚠️ سؤال مشابه موجود مسبقاً!
+    </div>
 
-<!-- ⬇️ أضف هذا هنا -->
-    
-<button onclick="window.open('add-question.html')">
-فتح إضافة الأسئلة (احتياطي)
-</button>
+    <button onclick="addQuestion()">💾 إضافة السؤال</button>
+    <button class="secondary" onclick="downloadJSON()">📥 تحميل JSON</button>
+    <button class="outline" onclick="clearForm()">🔄 مسح</button>
+    <button class="outline" onclick="window.open('add-question.html')">📋 فتح إدارة بنك الأسئلة</button>
 
-<div id="counter" class="counter">جارٍ التحميل...</div>
-
-    
     <div id="counter" class="counter">جارٍ التحميل...</div>
 </div>
 
 <script>
+"use strict";
+
+/* =========================
+   STATE
+========================= */
 let data = [];
 let nextId = 1;
 let loaded = false;
 
+/* =========================
+   INIT
+========================= */
 document.addEventListener("DOMContentLoaded", loadData);
 
 async function loadData(){
@@ -186,13 +211,16 @@ async function loadData(){
         loaded = true;
         updateCounter();
     }catch(e){
-        console.error(e);
+        console.error("Load error:", e);
         data = [];
         loaded = true;
         updateCounter();
     }
 }
 
+/* =========================
+   NORMALIZE
+========================= */
 function normalize(item){
     if(!item) return null;
 
@@ -227,6 +255,9 @@ function normalize(item){
     };
 }
 
+/* =========================
+   ADD QUESTION
+========================= */
 function addQuestion(){
     if(!loaded){
         alert("جارٍ تحميل البيانات...");
@@ -242,45 +273,64 @@ function addQuestion(){
     const a2 = document.getElementById("a2").value.trim();
     const a3 = document.getElementById("a3").value.trim();
     const a4 = document.getElementById("a4").value.trim();
-    const c = parseInt(document.getElementById("c").value,10);
+    const c = parseInt(document.getElementById("c").value, 10);
 
+    // Validation
     if(!category || !level || !q || !a1 || !a2 || !a3 || !a4 || isNaN(c)){
-        alert("أكمل البيانات");
+        alert("⚠️ أكمل جميع البيانات المطلوبة");
         return;
     }
 
     if(c < 0 || c > 3){
-        alert("الإجابة الصحيحة بين 0 و 3");
+        alert("⚠️ الإجابة الصحيحة يجب أن تكون بين 0 و 3");
         return;
     }
 
-    const normalizedQ = q.toLowerCase().replace(/\s+/g," ").trim();
+    // Duplicate detection (question text + options similarity)
+    const normalizedQ = q.toLowerCase().replace(/\s+/g, " ").trim();
+    const normalizedA = [a1, a2, a3, a4].map(x => x.toLowerCase().replace(/\s+/g, " ").trim()).join("|");
 
-    const duplicate = data.some(x =>
-        String(x.q).toLowerCase().replace(/\s+/g," ").trim() === normalizedQ
-    );
+    const duplicate = data.find(x => {
+        const existingQ = String(x.q).toLowerCase().replace(/\s+/g, " ").trim();
+        const existingA = x.a.map(opt => opt.toLowerCase().replace(/\s+/g, " ").trim()).join("|");
+
+        // Check exact match or high similarity
+        return existingQ === normalizedQ || existingA === normalizedA;
+    });
 
     if(duplicate){
-        alert("السؤال موجود مسبقاً");
-        return;
+        const dupWarn = document.getElementById("dupWarn");
+        dupWarn.style.display = "block";
+        dupWarn.innerHTML = `⚠️ سؤال مشابه موجود مسبقاً (رقم ${duplicate.id})<br><small>${duplicate.q.substring(0, 80)}...</small>`;
+
+        if(!confirm("السؤال يبدو مكرراً. هل تريد الإضافة رغم ذلك؟")){
+            return;
+        }
+        dupWarn.style.display = "none";
     }
 
-    data.push({
+    // Add question with auto-numbering
+    const newQuestion = {
         id: nextId++,
         category,
         level,
         source,
         q,
-        a:[a1,a2,a3,a4],
+        a: [a1, a2, a3, a4],
         c
-    });
+    };
+
+    data.push(newQuestion);
 
     updateCounter();
     clearForm();
-    alert("تمت الإضافة بنجاح");
+    alert(`✅ تمت الإضافة بنجاح - السؤال رقم ${newQuestion.id}`);
 }
 
-    function validateData(){
+/* =========================
+   VALIDATE DATA
+========================= */
+function validateData(){
     const broken = data.find(x =>
         !x.q ||
         !Array.isArray(x.a) ||
@@ -289,7 +339,7 @@ function addQuestion(){
     );
 
     if(broken){
-        alert("يوجد سؤال غير مكتمل — لا يمكن التصدير");
+        alert("⚠️ يوجد سؤال غير مكتمل — لا يمكن التصدير");
         console.error("Broken question:", broken);
         return false;
     }
@@ -297,12 +347,14 @@ function addQuestion(){
     return true;
 }
 
+/* =========================
+   DOWNLOAD JSON
+========================= */
 function downloadJSON(){
-
     if(!validateData()) return;
 
     if(!data.length){
-        alert("لا توجد بيانات");
+        alert("⚠️ لا توجد بيانات للتصدير");
         return;
     }
 
@@ -315,22 +367,30 @@ function downloadJSON(){
     const a = document.createElement("a");
     a.href = url;
     a.download = "fiqh-questions.json";
+    document.body.appendChild(a);
     a.click();
-
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
+    alert(`✅ تم التصدير - ${data.length} سؤال`);
 }
 
+/* =========================
+   CLEAR FORM
+========================= */
 function clearForm(){
     document.querySelectorAll("input").forEach(i => i.value = "");
     document.querySelectorAll("select").forEach(s => s.value = "");
+    document.getElementById("dupWarn").style.display = "none";
 }
 
+/* =========================
+   UPDATE COUNTER
+========================= */
 function updateCounter(){
     document.getElementById("counter").textContent =
-        "إجمالي الأسئلة: " + data.length;
+        `📊 إجمالي الأسئلة: ${data.length} | آخر رقم: ${nextId - 1}`;
 }
-
-    
 </script>
 
 </body>
