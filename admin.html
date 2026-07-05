@@ -66,6 +66,7 @@ tr:hover td{background:#fafbfc}
 .b-edit{background:#e3f2fd;color:#1565c0}
 .b-del{background:#ffebee;color:#c62828}
 .b-sync{background:#f3e5f5;color:#6a1b9a}
+
 /* Empty */
 .empty{text-align:center;padding:30px;color:#6c757d}
 .empty .ic{font-size:40px;margin-bottom:8px;opacity:.3}
@@ -117,3 +118,153 @@ tr:hover td{background:#fafbfc}
       <div class="stat"><div class="ic" style="background:#e0f2f1">📝</div><div><h3 id="stLast">-</h3><p>آخر إضافة</p></div></div>
       <div class="stat"><div class="ic" style="background:#ffebee">⚠️</div><div><h3 id="stIss">0</h3><p>مشاكل البيانات</p></div></div>
     </div>
+
+    <div class="card">
+      <h3>🚀 إجراءات سريعة</h3>
+      <div class="acts">
+        <a href="add-question.html" class="act" target="_blank"><span class="ic">➕</span><div><h4>إضافة أسئلة</h4><p>إدارة بنك الأسئلة</p></div></a>
+        <a href="add-question.html" class="act" target="_blank"><span class="ic">📋</span><div><h4>استيراد نصي</h4><p>لصق عشرات الأسئلة</p></div></a>
+        <a href="https://github.com/ieashehata1965-netizen/fiqh-tafaqh" class="act" target="_blank"><span class="ic">🐙</span><div><h4>GitHub</h4><p>المستودع والملفات</p></div></a>
+        <a href="index.html" class="act" target="_blank"><span class="ic">👁️</span><div><h4>معاينة</h4><p>عرض المنصة للطلاب</p></div></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔌 حالة النظام</h3>
+      <div class="status">
+        <span><span class="dot" id="dot"></span><span id="txt">جاري التحقق...</span></span>
+        <span>📡 GitHub: <span id="gh">جاري الفحص...</span></span>
+        <span>📦 آخر تحديث: <span id="upd">-</span></span>
+        <span>💾 نسخة محلية: <span id="bak">-</span></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔍 جودة البيانات</h3>
+      <div id="qual"><div class="empty"><div class="ic">🔍</div><p>جاري التحليل...</p></div></div>
+    </div>
+  </div>
+
+  <!-- Logs -->
+  <div id="sec-logs" style="display:none">
+    <div class="card">
+      <h3>📋 سجل العمليات <button onclick="clearLogs()" style="float:left;padding:4px 10px;background:#fff;border:1px solid #dee2e6;border-radius:6px;cursor:pointer;font-size:12px">🗑️ مسح</button></h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>التفاصيل</th><th>الحالة</th></tr></thead>
+          <tbody id="logBody"><tr><td colspan="5" class="empty"><div class="ic">📭</div><p>لا توجد عمليات مسجلة</p></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div id="sec-set" style="display:none">
+    <div class="card">
+      <h3>⚙️ إعدادات النظام</h3>
+      <div style="max-width:500px">
+        <p style="margin-bottom:10px;font-size:13px"><b>🔗 رابط JSON:</b><br><input value="https://ieashehata1965-netizen.github.io/Shariah-Training/fiqh-questions.json" readonly style="width:100%;padding:8px;border:1px solid #dee2e6;border-radius:6px;margin-top:4px;font-size:12px;background:#f8f9fa"></p>
+        <p style="margin-bottom:10px;font-size:13px"><b>🐙 المستودع:</b><br><input value="ieashehata1965-netizen/Shariah-Training" readonly style="width:100%;padding:8px;border:1px solid #dee2e6;border-radius:6px;margin-top:4px;font-size:12px;background:#f8f9fa"></p>
+        <p style="margin-bottom:10px;font-size:13px"><b>📁 المسار:</b><br><input value="fiqh-questions.json" readonly style="width:100%;padding:8px;border:1px solid #dee2e6;border-radius:6px;margin-top:4px;font-size:12px;background:#f8f9fa"></p>
+        <div style="background:#e3f2fd;padding:10px;border-radius:8px;font-size:12px;color:#1565c0">💡 إدارة الأسئلة من <a href="add-question.html" target="_blank" style="color:#0d47a1;font-weight:600">صفحة إدارة بنك الأسئلة</a></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const JSON_URL='https://ieashehata1965-netizen.github.io/Shariah-Training/fiqh-questions.json';
+let questions=[],auditLog=[];
+
+// Security
+if(sessionStorage.getItem('admin_access')!=='granted'){
+  document.body.innerHTML='<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Segoe UI"><div style="text-align:center"><div style="font-size:48px;margin-bottom:12px">⛔</div><h2 style="color:#dc2626">غير مصرح</h2><p style="color:#666;margin:12px 0">يجب تسجيل الدخول كمدير</p><a href="index.html" style="background:#16a34a;color:#fff;padding:8px 20px;border-radius:8px;text-decoration:none">العودة</a></div></div>';
+  throw new Error('Access Denied');
+}
+
+// Load data
+async function load(){
+  let backup=localStorage.getItem('questions_backup');
+  if(backup){try{questions=JSON.parse(backup)}catch(e){}}
+  try{
+    let r=await fetch(JSON_URL+'?v='+Date.now());
+    if(r.ok){
+      let d=await r.json();
+      if(Array.isArray(d)&&d.length>0){questions=d.filter(q=>q&&q.q&&q.a&&q.a.length===4);update();analyze()}
+    }
+  }catch(e){update()}
+  checkStatus();
+  loadLogs();
+}
+
+function update(){
+  document.getElementById('stQ').textContent=questions.length;
+  document.getElementById('stC').textContent=[...new Set(questions.map(q=>q.category).filter(Boolean))].size;
+  document.getElementById('stL').textContent=[...new Set(questions.map(q=>q.level).filter(Boolean))].size;
+  document.getElementById('stS').textContent=[...new Set(questions.map(q=>q.source).filter(Boolean))].size;
+  let last=questions[questions.length-1];
+  document.getElementById('stLast').textContent=last?'#'+last.id:'-';
+  let iss=questions.filter(q=>!q.q||!q.a||q.a.length!==4||q.a.some(a=>!a)||typeof q.c!=='number'||q.c<0||q.c>3).length;
+  document.getElementById('stIss').textContent=iss;
+}
+
+function analyze(){
+  let issues=[],warns=[];
+  questions.forEach(q=>{
+    if(!q.category||q.category==='غير مصنف')warns.push(`#${q.id}: بدون تصنيف`);
+    if(!q.source||q.source==='غير محدد')warns.push(`#${q.id}: بدون مصدر`);
+    if(!q.level||q.level==='غير محدد')warns.push(`#${q.id}: بدون مستوى`);
+  });
+  let seen=new Map();
+  questions.forEach(q=>{let k=q.q.toLowerCase().replace(/\s+/g,' ').trim();if(seen.has(k))issues.push(`تكرار: #${q.id} مع #${seen.get(k)}`);else seen.set(k,q.id)});
+  questions.forEach(q=>{if(typeof q.c!=='number'||q.c<0||q.c>3)issues.push(`#${q.id}: إجابة غير صالحة`)});
+  let html='';
+  if(issues.length===0&&warns.length===0)html='<div class="qual ok"><div style="font-size:28px;margin-bottom:6px">✅</div><b>البيانات نظيفة</b><br><span style="font-size:12px;opacity:.8">لا توجد مشاكل</span></div>';
+  else{
+    if(issues.length)html+=`<div class="qual err"><b>❌ أخطاء (${issues.length}):</b><ul style="margin:6px 0 0 0;padding-right:16px;font-size:12px">${issues.slice(0,5).map(i=>`<li>${i}</li>`).join('')}${issues.length>5?`<li>... و ${issues.length-5} أخرى</li>`:''}</ul></div>`;
+    if(warns.length)html+=`<div class="qual warn"><b>⚠️ تحذيرات (${warns.length}):</b><ul style="margin:6px 0 0 0;padding-right:16px;font-size:12px">${warns.slice(0,5).map(w=>`<li>${w}</li>`).join('')}${warns.length>5?`<li>... و ${warns.length-5} أخرى</li>`:''}</ul></div>`;
+  }
+  document.getElementById('qual').innerHTML=html;
+}
+
+async function checkStatus(){
+  let dot=document.getElementById('dot'),txt=document.getElementById('txt'),gh=document.getElementById('gh');
+  try{let r=await fetch(JSON_URL,{method:'HEAD'});if(r.ok){dot.className='dot on';txt.textContent='متصل';gh.textContent='✅ يعمل'}else throw new Error()}
+  catch(e){dot.className='dot off';txt.textContent='غير متصل';gh.textContent='❌ خطأ'}
+  let upd=localStorage.getItem('last_sync_time');
+  document.getElementById('upd').textContent=upd?new Date(upd).toLocaleString('ar-SA'):'غير معروف';
+  let bak=localStorage.getItem('questions_backup');
+  document.getElementById('bak').textContent=bak?'✅ '+JSON.parse(bak).length+' سؤال':'❌ غير متوفرة';
+}
+
+function loadLogs(){
+  let s=localStorage.getItem('audit_log');
+  if(s){try{auditLog=JSON.parse(s);renderLogs()}catch(e){}}
+}
+function renderLogs(){
+  let b=document.getElementById('logBody');
+  if(!auditLog.length){b.innerHTML='<tr><td colspan="5" class="empty"><div class="ic">📭</div><p>لا توجد عمليات مسجلة</p></td></tr>';return}
+  let map={add:['b-add','إضافة'],edit:['b-edit','تعديل'],del:['b-del','حذف'],sync:['b-sync','مزامنة']};
+  b.innerHTML=auditLog.slice().reverse().map(e=>{
+    let m=map[e.type]||['b-add',e.type];
+    return`<tr><td>${new Date(e.time).toLocaleString('ar-SA')}</td><td>${e.user||'مدير'}</td><td><span class="badge ${m[0]}">${m[1]}</span></td><td>${e.details||'-'}</td><td>${e.status==='success'?'✅ نجاح':'❌ فشل'}</td></tr>`
+  }).join('');
+}
+function clearLogs(){if(!confirm('مسح السجل؟'))return;auditLog=[];localStorage.removeItem('audit_log');renderLogs()}
+
+function show(id){
+  document.getElementById('sec-dash').style.display='none';
+  document.getElementById('sec-logs').style.display='none';
+  document.getElementById('sec-set').style.display='none';
+  document.getElementById('sec-'+id).style.display='block';
+  let titles={dash:'📊 لوحة التحكم',logs:'📋 سجل العمليات',set:'⚙️ الإعدادات'};
+  document.getElementById('title').textContent=titles[id]||'';
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('on'));
+  event.currentTarget.classList.add('on');
+}
+
+load();
+</script>
+
+</body>
+</html>
