@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
-<script data-goatcounter="https://islamicfiqhacademy.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>منصة التدريب الفقهي</title>
-
-<script src="qrcode.min.js"></script>
-
 <style>
 body{
     background:#d1fae5;
-    font-family:Tahoma, Arial;
+    font-family:Tahoma, Arial, sans-serif;
     text-align:center;
     padding:20px;
+    margin:0;
 }
 
 .main-card{
@@ -38,6 +32,8 @@ input,select,button{
     border-radius:10px;
     border:1px solid #d1d5db;
     font-size:15px;
+    font-family:inherit;
+    box-sizing:border-box;
 }
 
 button{
@@ -49,6 +45,11 @@ button{
 }
 
 button:hover{background:#15803d;}
+
+button:disabled{
+    background:#9ca3af;
+    cursor:not-allowed;
+}
 
 .question{
     font-size:22px;
@@ -67,6 +68,7 @@ button:hover{background:#15803d;}
     border:1px solid #d1d5db;
     font-weight:700;
     color:#000;
+    transition:background .2s;
 }
 
 .answer:hover{background:#dcfce7;}
@@ -78,19 +80,47 @@ button:hover{background:#15803d;}
     margin-bottom:8px;
 }
 
+.error-msg{
+    color:#dc2626;
+    font-weight:bold;
+    padding:20px;
+}
+
+.success-msg{
+    color:#16a34a;
+    font-weight:bold;
+    padding:20px;
+}
+
+.result-box{
+    background:#fff;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+    margin-top:20px;
+}
+
+.wrong-item{
+    border:1px solid #ddd;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    text-align:right;
+}
+
+.wrong-ans{color:#b91c1c;}
+.correct-ans{color:#15803d;}
+
 @media print {
     body * { visibility: hidden !important; }
-
     #certificate,
     #certificate * { visibility: visible !important; }
-
     #certificate {
         position: absolute !important;
         top: 0;
         left: 0;
         width: 100%;
     }
-
     #quiz { display: none !important; }
 }
 </style>
@@ -120,6 +150,8 @@ button:hover{background:#15803d;}
     <option value="لغة عربية">لغة عربية</option>
     <option value="سيرة">سيرة</option>
     <option value="منوعات إسلامية">منوعات إسلامية</option>
+    <option value="ثقافة إسلامية">ثقافة إسلامية</option>
+    <option value="عام">عام</option>
 </select>
 
 <select id="levelFilter">
@@ -142,7 +174,7 @@ button:hover{background:#15803d;}
 
 </div>
 
-<button onclick="startExam()">ابدأ الاختبار</button>
+<button onclick="startExam()" id="startBtn">ابدأ الاختبار</button>
 
 <div id="quiz"></div>
 
@@ -174,10 +206,10 @@ let score = 0;
 let candidateName = "";
 let selectedCount = 5;
 let answered = false;
-let wrongAnswers = [];
-let userAnswers = []; // ✅ FIX: تعريف الإجابات
+let userAnswers = [];
 
-const MIN_CERT_QUESTIONS = 3;
+const MIN_CERT_QUESTIONS = 20;
+const JSON_URL = "https://raw.githubusercontent.com/ieashehata1965-netizen/fiqh-tafaqh/main/fiqh-questions.json";
 
 /* =========================
    LOAD NAME FROM HOME PAGE
@@ -194,10 +226,7 @@ const MIN_CERT_QUESTIONS = 3;
 ========================= */
 async function loadQuestions() {
     try {
-        const res = await fetch(
-            "https://raw.githubusercontent.com/ieashehata1965-netizen/fiqh-tafaqh/main/fiqh-questions.json",
-            { cache: "no-store" }
-        );
+        const res = await fetch(JSON_URL, { cache: "no-store" });
 
         if (!res.ok) throw new Error("HTTP Error: " + res.status);
 
@@ -207,14 +236,13 @@ async function loadQuestions() {
 
         allQuestions = raw.map(normalize).filter(Boolean);
 
-        selectedCount = Math.min(selectedCount, allQuestions.length);
-        questions = allQuestions.slice(0, selectedCount);
-
         return true;
 
     } catch (e) {
         console.error(e);
-        document.getElementById("quiz").innerHTML = "فشل تحميل الأسئلة";
+        document.getElementById("quiz").innerHTML = '<div class="error-msg">❌ فشل تحميل الأسئلة. تأكد من اتصالك بالإنترنت.</div>';
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("startBtn").textContent = "ابدأ الاختبار";
         return false;
     }
 }
@@ -246,8 +274,8 @@ function normalize(item){
 ========================= */
 function shuffle(arr){
     const a = [...arr];
-    for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
+    for(let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
@@ -261,13 +289,18 @@ window.startExam = async function () {
     candidateName = document.getElementById("candidateName").value.trim();
 
     if(!candidateName){
-        alert("أدخل الاسم");
+        alert("⚠️ أدخل اسمك");
+        document.getElementById("candidateName").focus();
         return;
     }
 
-    selectedCount = parseInt(document.getElementById("questionCount").value,10) || 5;
+    selectedCount = parseInt(document.getElementById("questionCount").value, 10) || 5;
 
-    document.getElementById("quiz").innerHTML = "جاري التحميل...";
+    const btn = document.getElementById("startBtn");
+    btn.disabled = true;
+    btn.textContent = "جاري التحميل...";
+
+    document.getElementById("quiz").innerHTML = '<div class="success-msg">⏳ جاري تحميل الأسئلة...</div>';
 
     const ok = await loadQuestions();
     if(!ok) return;
@@ -280,12 +313,24 @@ window.startExam = async function () {
         (lvl === "all" || q.level === lvl)
     );
 
+    if(pool.length === 0){
+        document.getElementById("quiz").innerHTML = '<div class="error-msg">❌ لا توجد أسئلة تطابق الفلاتر المحددة.</div>';
+        btn.disabled = false;
+        btn.textContent = "ابدأ الاختبار";
+        return;
+    }
+
+    // Adjust selectedCount if pool is smaller
+    selectedCount = Math.min(selectedCount, pool.length);
+
     questions = shuffle(pool).slice(0, selectedCount);
 
     current = 0;
     score = 0;
-    wrongAnswers = [];
-    userAnswers = []; // reset
+    userAnswers = new Array(selectedCount).fill(null);
+
+    btn.style.display = "none";
+    document.querySelector('.main-card').style.display = 'none';
 
     showQuestion();
 };
@@ -304,12 +349,12 @@ function showQuestion(){
 
     const q = questions[current];
 
-    let html = "<div class='question'>";
-    html += "<div class='meta'>سؤال " + (current+1) + " من " + questions.length + "</div>";
-    html += "<div>" + q.q + "</div>";
+    let html = "<div class='main-card'>";
+    html += "<div class='meta'>سؤال " + (current + 1) + " من " + questions.length + "</div>";
+    html += "<div class='question'>" + esc(q.q) + "</div>";
 
-    q.a.forEach((ans,i)=>{
-        html += "<div class='answer' onclick='answer(" + i + ")'>" + ans + "</div>";
+    q.a.forEach((ans, i) => {
+        html += "<div class='answer' onclick='answer(" + i + ")' id='ans" + i + "'>" + esc(ans) + "</div>";
     });
 
     html += "</div>";
@@ -326,9 +371,9 @@ function answer(i){
     answered = true;
 
     const q = questions[current];
-    const boxes = document.querySelectorAll(".answer");
+    userAnswers[current] = i;
 
-    userAnswers[current] = i; // ✅ FIX: تسجيل الإجابة
+    const boxes = document.querySelectorAll(".answer");
 
     if(i === q.c){
         score++;
@@ -336,20 +381,12 @@ function answer(i){
     } else {
         if(boxes[i]) boxes[i].style.background = "#fee2e2";
         if(boxes[q.c]) boxes[q.c].style.background = "#dcfce7";
-
-        wrongAnswers.push({
-            question: q.q,
-            yourAnswer: q.a[i],
-            correctAnswer: q.a[q.c]
-        });
     }
 
     setTimeout(() => {
-
         current++;
-        showQuestion(); // ✅ FIX: إصلاح البنية
-
-    }, 300);
+        showQuestion();
+    }, 800);
 }
 
 /* =========================
@@ -357,93 +394,120 @@ function answer(i){
 ========================= */
 function showResult(){
 
-    const total = questions?.length || 0;
+    const total = questions.length;
     const percent = total ? Math.round((score / total) * 100) : 0;
 
     const level =
-        percent >= 90 ? "ممتاز" :
-        percent >= 75 ? "جيد جداً" :
-        percent >= 60 ? "جيد" :
-        "يحتاج تطوير";
-
-    // ✅ شرط الشهادة الصحيح (تصحيح رقابي)
-    const MIN_CERT_QUESTIONS = 20;
+        percent >= 90 ? "ممتاز 🌟" :
+        percent >= 75 ? "جيد جداً 👍" :
+        percent >= 60 ? "جيد ✅" :
+        "يحتاج تطوير 📚";
 
     const showCertificate =
         selectedCount >= MIN_CERT_QUESTIONS && percent >= 60;
 
+    // Build wrong answers HTML
     let wrongAnswersHTML = "";
 
-    const safeQuestions = Array.isArray(questions) ? questions : [];
-    const safeAnswers = Array.isArray(userAnswers) ? userAnswers : [];
-
-    safeQuestions.forEach((q, index) => {
-
-        const userAnswer = safeAnswers[index];
-        const correct = q?.c;
-        const options = Array.isArray(q?.a) ? q.a : [];
+    questions.forEach((q, index) => {
+        const userAnswer = userAnswers[index];
+        const correct = q.c;
+        const options = q.a;
 
         if(userAnswer !== correct){
-
             wrongAnswersHTML += `
-                <div style="border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:6px;">
-                    <p><b>السؤال:</b> ${q?.q || "غير متوفر"}</p>
-
-                    <p style="color:#b91c1c;">
-                        إجابتك: ${options[userAnswer] ?? "لم تتم الإجابة"}
+                <div class="wrong-item">
+                    <p><b>السؤال:</b> ${esc(q.q)}</p>
+                    <p class="wrong-ans">
+                        ❌ إجابتك: ${esc(options[userAnswer] ?? "لم تتم الإجابة")}
                     </p>
-
-                    <p style="color:#15803d;">
-                        الإجابة الصحيحة: ${options[correct] ?? "غير متوفرة"}
+                    <p class="correct-ans">
+                        ✅ الإجابة الصحيحة: ${esc(options[correct] ?? "غير متوفرة")}
                     </p>
                 </div>
             `;
         }
     });
 
+    // Update exam count
+    let totalExams = parseInt(localStorage.getItem('total_exams') || '0', 10);
+    localStorage.setItem('total_exams', totalExams + 1);
+
+    // Update cert count if applicable
+    if(showCertificate){
+        let totalCerts = parseInt(localStorage.getItem('total_certs') || '0', 10);
+        localStorage.setItem('total_certs', totalCerts + 1);
+    }
+
     document.getElementById("quiz").innerHTML = `
-        <div>
-            <h2>النتيجة النهائية</h2>
+        <div class="result-box">
+            <h2>🎯 النتيجة النهائية</h2>
 
-            <p>النتيجة: ${score} / ${total}</p>
-            <p>النسبة: ${percent}%</p>
-            <p>التقييم: ${level}</p>
+            <p style="font-size:18px;margin:15px 0;"><b>النتيجة:</b> ${score} / ${total}</p>
+            <p style="font-size:18px;margin:15px 0;"><b>النسبة:</b> ${percent}%</p>
+            <p style="font-size:18px;margin:15px 0;"><b>التقييم:</b> ${level}</p>
 
-            <hr>
+            <hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb;">
 
-            <h3>تحليل الأخطاء</h3>
+            <h3>📋 تحليل الأخطاء</h3>
 
-            ${wrongAnswersHTML || "<p style='color:green;'>لا توجد أخطاء 🎯</p>"}
+            ${wrongAnswersHTML || "<p style='color:green;font-weight:bold;'>🎉 لا توجد أخطاء — أحسنت!</p>"}
 
-            <hr>
+            <hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb;">
 
             ${
                 showCertificate
-                ? `<button onclick="printCertificate(${percent})">
-                        طباعة الشهادة
+                ? `<button onclick="printCertificate(${percent})" style="margin:10px;">
+                        🎓 طباعة الشهادة
                    </button>`
-                : `<p style="color:#b91c1c;font-weight:bold;">
-                        لا تتوفر شهادة إلا عند حل 20 سؤالًا فأكثر بنسبة نجاح 60%
+                : `<p style="color:#b91c1c;font-weight:bold;padding:15px;background:#fef2f2;border-radius:8px;">
+                        📝 لا تتوفر شهادة إلا عند حل ${MIN_CERT_QUESTIONS} سؤالًا فأكثر بنسبة نجاح 60%
                    </p>`
             }
 
-            <button onclick="location.reload()">إعادة الاختبار</button>
+            <button onclick="location.reload()" style="margin:10px;background:#374151;">🔄 إعادة الاختبار</button>
+            <br>
+            <a href="home.html" style="display:inline-block;margin:10px;padding:12px 28px;background:#16a34a;color:#fff;border-radius:50px;text-decoration:none;font-weight:bold;">🏠 العودة للرئيسية</a>
         </div>
     `;
 }
-        function printCertificate(percent){
+
+/* =========================
+   PRINT CERTIFICATE
+========================= */
+function printCertificate(percent){
 
     const certId = "FIQH-" + Date.now();
 
-    const url =
-        "certificate.html?name=" + encodeURIComponent(candidateName) +
-        "&score=" + score +
-        "&total=" + questions.length +
-        "&id=" + certId;
+    // Create certificate inline instead of redirecting
+    const certHTML = `
+        <div id="cert-print" style="padding:40px;border:8px double #166534;border-radius:18px;background:linear-gradient(135deg,#ecfdf5,#ffffff);text-align:center;max-width:700px;margin:0 auto;">
+            <h1 style="color:#166534;font-size:28px;margin-bottom:20px;">🎓 شهادة إتمام الاختبار</h1>
+            <p style="font-size:18px;margin:15px 0;"><b>اسم المتدرب:</b> ${esc(candidateName)}</p>
+            <p style="font-size:18px;margin:15px 0;"><b>النتيجة:</b> ${score} / ${questions.length}</p>
+            <p style="font-size:18px;margin:15px 0;"><b>النسبة:</b> ${percent}%</p>
+            <p style="font-size:18px;margin:15px 0;"><b>رقم الشهادة:</b> ${certId}</p>
+            <p style="font-size:14px;color:#666;margin-top:30px;">تم إصدار هذه الشهادة إلكترونياً من منصة التدريب الفقهي</p>
+            <p style="font-size:14px;color:#666;">تاريخ الإصدار: ${new Date().toLocaleDateString('ar-SA')}</p>
+        </div>
+    `;
 
-    window.location.href = url;
+    document.getElementById("quiz").innerHTML = certHTML + `
+        <div style="text-align:center;margin-top:20px;">
+            <button onclick="window.print()" style="margin:10px;">🖨️ طباعة</button>
+            <button onclick="location.reload()" style="margin:10px;background:#374151;">🔄 اختبار جديد</button>
+        </div>
+    `;
 }
 
+/* =========================
+   UTILS
+========================= */
+function esc(t){
+    const div = document.createElement('div');
+    div.textContent = t;
+    return div.innerHTML;
+}
 </script>
 
 </body>
