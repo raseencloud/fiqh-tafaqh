@@ -334,7 +334,6 @@ window.startExam = async function () {
 
     showQuestion();
 };
-
 /* =========================
    SHOW QUESTION
 ========================= */
@@ -361,7 +360,6 @@ function showQuestion(){
 
     document.getElementById("quiz").innerHTML = html;
 }
-
 /* =========================
    ANSWER
 ========================= */
@@ -388,7 +386,6 @@ function answer(i){
         showQuestion();
     }, 800);
 }
-
 /* =========================
    RESULT
 ========================= */
@@ -438,7 +435,6 @@ function showResult(){
         let totalCerts = parseInt(localStorage.getItem('total_certs') || '0', 10);
         localStorage.setItem('total_certs', totalCerts + 1);
     }
-
     document.getElementById("quiz").innerHTML = `
         <div class="result-box">
             <h2>🎯 النتيجة النهائية</h2>
@@ -499,7 +495,6 @@ function printCertificate(percent){
         </div>
     `;
 }
-
 /* =========================
    UTILS
 ========================= */
