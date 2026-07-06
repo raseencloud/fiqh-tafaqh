@@ -357,14 +357,14 @@ window.startExam = async function () {
     if(!ok) return;
 
     const cat = document.getElementById("categoryFilter").value;
-    const lvl = document.getElementById("levelFilter").value;
-    const src = document.getElementById("sourceFilter").value;
+const lvl = document.getElementById("levelFilter").value;
+const src = document.getElementById("sourceFilter").value;
 
-    let pool = allQuestions.filter(q =>
-        (cat === "all" || q.category === cat) &&
-        (lvl === "all" || q.level === lvl) &&
-        (src === "all" || q.source === src)
-    );
+let pool = allQuestions.filter(q =>
+    (cat === "all" || q.category === cat) &&
+    (lvl === "all" || q.level === lvl) &&
+    (src === "all" || q.source === src)
+);
 
     if(pool.length === 0){
         document.getElementById("quiz").innerHTML = '<div class="error-msg">❌ لا توجد أسئلة تطابق الفلاتر المحددة.</div>';
