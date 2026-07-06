@@ -278,7 +278,8 @@ alert("عدد الأسئلة: " + allQuestions.length);
 alert("أول مصدر: " + allQuestions[0].source);
 
 const sources = [...new Set(allQuestions.map(q => q.source).filter(Boolean))].sort();
-        
+alert("عدد المصادر: " + sources.length);
+
 const sourceList = document.getElementById("sourceList");
 sourceList.innerHTML = "";
 
