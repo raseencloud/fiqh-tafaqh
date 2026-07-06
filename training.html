@@ -276,15 +276,15 @@ async function loadQuestions() {
 
         // Populate source filter dynamically
         const sources = [...new Set(allQuestions.map(q => q.source).filter(Boolean))].sort();
-        const sourceFilter = document.getElementById("sourceFilter");
-        // Keep the first option (all)
-        sourceFilter.innerHTML = '<option value="all">📖 كل المصادر</option>';
-        sources.forEach(src => {
-            const opt = document.createElement("option");
-            opt.value = src;
-            opt.textContent = "📖 " + src;
-            sourceFilter.appendChild(opt);
-        });
+
+const sourceList = document.getElementById("sourceList");
+sourceList.innerHTML = "";
+
+sources.forEach(src => {
+    const opt = document.createElement("option");
+    opt.value = src;
+    sourceList.appendChild(opt);
+});
 
         return true;
 
