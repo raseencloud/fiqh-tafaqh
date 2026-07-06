@@ -274,8 +274,7 @@ async function loadQuestions() {
 
         allQuestions = raw.map(normalize).filter(Boolean);
         alert("عدد الأسئلة: " + allQuestions.length);
-        
-        // Populate source filter dynamically
+               // Populate source filter dynamically
         const sources = [...new Set(allQuestions.map(q => q.source).filter(Boolean))].sort();
 
 const sourceList = document.getElementById("sourceList");
