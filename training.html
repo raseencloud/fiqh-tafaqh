@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة التدريب الفقهي</title>
+<style>
+:root{--p:#1a1a2e;--s:#16213e;--a:#0f3460;--g:#6c757d;--b:#dee2e6;--sh:0 4px 20px rgba(0,0,0,.1);--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:linear-gradient(135deg,#f5f7fa,#e4e8ec);min-height:100vh;color:var(--p)}
+.cont{max-width:900px;margin:0 auto;padding:20px}
+
+/* Header */
+.head{background:linear-gradient(135deg,var(--p),var(--a));color:#fff;padding:20px;border-radius:var(--r);margin-bottom:16px;box-shadow:var(--sh);text-align:center}
+.head h1{font-size:22px;margin-bottom:4px}
+.head p{opacity:.85;font-size:13px}
+
+/* Stats */
+.sts{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.st{background:#fff;padding:10px 16px;border-radius:10px;box-shadow:var(--sh);text-align:center;min-width:90px;flex:1}
+.st .n{font-size:20px;font-weight:700;color:var(--a)}
+.st .l{font-size:11px;color:var(--g)}
+
+/* Filters - محسنة للبحث بالمصدر */
+.fil{background:#fff;padding:16px;border-radius:var(--r);margin-bottom:14px;box-shadow:var(--sh)}
+.fil h3{font-size:14px;color:var(--a);margin-bottom:10px}
+.fil-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:flex-end}
+.fil-row label{font-size:12px;font-weight:600;color:var(--g);display:block;margin-bottom:4px}
+.fil-row select,.fil-row input{flex:1;min-width:160px;padding:10px 12px;border:2px solid var(--b);border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.fil-row select:focus,.fil-row input:focus{outline:none;border-color:var(--a)}
+.fil-row .btn{padding:10px 18px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit;background:linear-gradient(135deg,var(--a),var(--s));color:#fff}
+.fil-row .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.fil-row .btn-o{background:#fff;border:2px solid var(--b);color:var(--g)}
+.fil-row .btn-o:hover{border-color:var(--a);color:var(--a)}
+
+/* Search by source - القائمة المنسدلة للمصادر */
+.src-wrap{position:relative;flex:2;min-width:200px}
+.src-wrap label{font-size:12px;font-weight:600;color:var(--g);display:block;margin-bottom:4px}
+#srcSearch{width:100%;padding:10px 12px;border:2px solid var(--b);border-radius:8px;font-size:13px;font-family:inherit}
+#srcSearch:focus{outline:none;border-color:var(--a)}
+.src-list{position:absolute;top:100%;right:0;left:0;background:#fff;border:1px solid var(--b);border-radius:8px;max-height:200px;overflow-y:auto;z-index:100;display:none;box-shadow:var(--sh);margin-top:4px}
+.src-list.on{display:block}
+.src-item{padding:8px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid #f0f0f0}
+.src-item:hover{background:#e3f2fd;color:var(--a)}
+.src-item.sel{background:#e8f5e9;color:#2e7d32;font-weight:600}
+
+/* Quiz */
+.qz{background:#fff;border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--sh);display:none}
+.qz.on{display:block}
+.qz-head{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.qz-tag{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+.tg-cat{background:#e3f2fd;color:#1565c0}
+.tg-lvl{background:#fff3e0;color:#ef6c00}
+.tg-src{background:#f3e5f5;color:#6a1b9a}
+.qz-src{font-size:12px;color:var(--g);margin-bottom:8px;padding:6px 10px;background:#f8f9fa;border-radius:6px;border-right:3px solid var(--a)}
+.qz-q{font-size:16px;font-weight:700;color:var(--p);margin-bottom:14px;line-height:1.6}
+.ans{display:flex;flex-direction:column;gap:8px}
+.ans-btn{padding:12px 16px;border:2px solid var(--b);border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-family:inherit;text-align:right;transition:.2s}
+.ans-btn:hover{border-color:var(--a);background:#f8f9fa}
+.ans-btn.ok{border-color:#2ecc71;background:#e8f5e9;color:#155724}
+.ans-btn.err{border-color:#e74c3c;background:#ffebee;color:#721c24}
+.ans-btn.dis{pointer-events:none;opacity:.7}
+
+/* Progress */
+.prog{background:#fff;padding:12px 16px;border-radius:var(--r);margin-bottom:14px;box-shadow:var(--sh)}
+.prog-bar{height:8px;background:var(--b);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#2ecc71,#27ae60);border-radius:4px;transition:.3s;width:0%}
+.prog-txt{display:flex;justify-content:space-between;font-size:12px;color:var(--g);margin-top:6px}
+
+/* Result */
+.res{background:#fff;border-radius:var(--r);padding:24px;margin-bottom:14px;box-shadow:var(--sh);text-align:center;display:none}
+.res.on{display:block}
+.res h2{font-size:20px;margin-bottom:8px}
+.res .sc{font-size:48px;font-weight:800;color:var(--a);margin:10px 0}
+.res .det{font-size:13px;color:var(--g);margin-bottom:16px}
+
+/* Buttons */
+.btn{padding:10px 18px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.btn-p{background:linear-gradient(135deg,var(--a),var(--s));color:#fff}
+.btn-s{background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff}
+.btn-o{background:#fff;border:2px solid var(--b);color:var(--g)}
+.btn-o:hover{border-color:var(--a);color:var(--a)}
+
+/* Certificate */
+.cert{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border:2px dashed var(--b);border-radius:var(--r);padding:20px;text-align:center;margin-top:14px}
+.cert h3{color:var(--a);margin-bottom:8px}
+.cert p{font-size:13px;color:var(--g);margin-bottom:12px}
+
+/* Toast */
+.toast-wrap{position:fixed;top:12px;left:12px;z-index:2000;display:flex;flex-direction:column;gap:5px}
+.toast{padding:10px 14px;border-radius:8px;color:#fff;font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:tIn .25s ease}
+@keyframes tIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.toast.ok{background:#2ecc71}
+.toast.err{background:#e74c3c}
+.toast.inf{background:var(--a)}
+
+/* Empty */
+.empty{text-align:center;padding:30px 20px;color:var(--g)}
+.empty .ic{font-size:36px;margin-bottom:6px;opacity:.3}
+
+/* Responsive */
+@media(max-width:768px){
+.fil-row{flex-direction:column}
+.fil-row select,.fil-row input,.src-wrap{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="cont">
+  <div class="head">
+    <h1>📚 منصة التدريب الفقهي</h1>
+    <p>اختبر معلوماتك في الفقه والعقيدة والحديث والتفسير</p>
+  </div>
+
+  <div class="sts">
+    <div class="st"><div class="n" id="stT">0</div><div class="l">إجمالي الأسئلة</div></div>
+    <div class="st"><div class="n" id="stF">0</div><div class="l">المتاحة</div></div>
+    <div class="st"><div class="n" id="stC">0</div><div class="l">الإجابات الصحيحة</div></div>
+    <div class="st"><div class="n" id="stW">0</div><div class="l">الخاطئة</div></div>
+  </div>
+
+  <!-- Filters - محسنة للبحث بالمصدر -->
+  <div class="fil" id="filPanel">
+    <h3>🔍 اختر معايير الاختبار</h3>
+    <div class="fil-row">
+      <div style="flex:1;min-width:160px">
+        <label>الفئة</label>
+        <select id="fCat" onchange="applyFil()">
+          <option value="">الكل</option>
+          <option value="فقه">فقه</option>
+          <option value="عقيدة">عقيدة</option>
+          <option value="حديث">حديث</option>
+          <option value="تفسير">تفسير</option>
+          <option value="أصول فقه">أصول فقه</option>
+          <option value="سيرة">سيرة</option>
+          <option value="لغة عربية">لغة عربية</option>
+          <option value="ثقافة إسلامية">ثقافة إسلامية</option>
+          <option value="منوعات إسلامية">منوعات إسلامية</option>
+          <option value="عام">عام</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:160px">
+        <label>المستوى</label>
+        <select id="fLvl" onchange="applyFil()">
+          <option value="">الكل</option>
+          <option value="سهل">🟢 سهل</option>
+          <option value="متوسط">🟡 متوسط</option>
+          <option value="صعب">🔴 صعب</option>
+        </select>
+      </div>
+    </div>
+    <div class="fil-row">
+      <!-- البحث بالمصدر - قائمة منسدلة ذكية -->
+      <div class="src-wrap">
+        <label>📖 البحث بالمصدر (الكتاب / المنهج)</label>
+        <input type="text" id="srcSearch" placeholder="اكتب للبحث في المصادر..." autocomplete="off" oninput="filterSrc(this.value)" onfocus="showSrcList()">
+        <div class="src-list" id="srcList"></div>
+      </div>
+      <button class="btn btn-p" onclick="startQz()">🚀 ابدأ الاختبار</button>
+      <button class="btn btn-o" onclick="resetFil()">🔄 إعادة</button>
+    </div>
+    <div id="selSrc" style="margin-top:8px;font-size:12px;color:var(--g);display:none">
+      المصدر المختار: <span id="selSrcTxt" style="font-weight:600;color:var(--a)"></span>
+      <button onclick="clearSrc()" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:12px;margin-right:8px">❌ إلغاء</button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog" id="progPanel" style="display:none">
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-txt"><span id="progCur">0</span><span id="progTot">0</span></div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="qz" id="qzPanel">
+    <div class="qz-head">
+      <span class="qz-tag tg-cat" id="qCat">-</span>
+      <span class="qz-tag tg-lvl" id="qLvl">-</span>
+      <span class="qz-tag tg-src" id="qSrcTag">-</span>
+    </div>
+    <div class="qz-src" id="qSrc">📖 المصدر: <span>-</span></div>
+    <div class="qz-q" id="qTxt">جارٍ التحميل...</div>
+    <div class="ans" id="qAns"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="res" id="resPanel">
+    <h2>🎯 نتيجة الاختبار</h2>
+    <div class="sc" id="resSc">0%</div>
+    <div class="det" id="resDet">0 صحيحة من 0</div>
+    <div id="resMsg"></div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-p" onclick="restart()">🔄 اختبار جديد</button>
+      <button class="btn btn-s" onclick="location.href='index.html'">🏠 الرئيسية</button>
+    </div>
+    <div class="cert" id="certPanel" style="display:none">
+      <h3>🎓 تهانينا!</h3>
+      <p>لقد حصلت على نسبة تؤهلك للشهادة. اضغط للتحميل.</p>
+      <button class="btn btn-p" onclick="dlCert()">📥 تحميل الشهادة</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+const JSON_URL='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/fiqh-questions.json';
+let allQs=[],filQs=[],curQs=[],curIdx=0,cor=0,wro=0,selSrc='';
+
+// ========== LOAD DATA ==========
+async function init(){
+  toast('🔄 جاري تحميل الأسئلة...','inf');
+  try{
+    let r=await fetch(JSON_URL+'?v='+Date.now());
+    if(!r.ok)throw new Error('فشل التحميل');
+    let d=await r.json();
+    if(!Array.isArray(d))throw new Error('بيانات غير صالحة');
+    allQs=d.filter(q=>q&&q.q&&q.a&&q.a.length===4&&typeof q.c==='number');
+    // إزالة التكرارات
+    let seen=new Set();
+    allQs=allQs.filter(q=>{let k=(q.q+'').toLowerCase().trim();if(seen.has(k))return false;seen.add(k);return true});
+    document.getElementById('stT').textContent=allQs.length;
+    buildSrcList();
+    applyFil();
+    toast('✅ تم تحميل '+allQs.length+' سؤال','ok');
+  }catch(e){
+    toast('❌ '+e.message,'err');
+    document.getElementById('stT').textContent='!';
+  }
+}
+
+// ========== SOURCE SEARCH - البحث الذكي بالمصدر ==========
+function buildSrcList(){
+  // استخراج المصادر الفريدة وترتيبها
+  let srcs=[...new Set(allQs.map(q=>q.source).filter(Boolean))].sort((a,b)=>{
+    // ترتيب: المصادر المحددة أولاً ثم "غير محدد" آخراً
+    if(a==='غير محدد')return 1;
+    if(b==='غير محدد')return -1;
+    return a.localeCompare(b,'ar');
+  });
+  window._srcs=srcs;
+}
+
+function showSrcList(){
+  let list=document.getElementById('srcList');
+  renderSrcList(window._srcs||[]);
+  list.classList.add('on');
+}
+
+function filterSrc(txt){
+  let list=document.getElementById('srcList');
+  if(!txt){renderSrcList(window._srcs||[]);list.classList.add('on');return}
+  let fil=(window._srcs||[]).filter(s=>s.toLowerCase().includes(txt.toLowerCase()));
+  renderSrcList(fil);
+  list.classList.add('on');
+}
+
+function renderSrcList(srcs){
+  let html='';
+  if(!srcs.length){
+    html='<div class="src-item" style="color:var(--g)">لا توجد مصادر مطابقة</div>';
+  }else{
+    html=srcs.map(s=>`<div class="src-item ${selSrc===s?'sel':''}" onclick="pickSrc('${esc(s)}')">${esc(s)} ${selSrc===s?'✓':''}</div>`).join('');
+  }
+  document.getElementById('srcList').innerHTML=html;
+}
+
+function pickSrc(src){
+  selSrc=src;
+  document.getElementById('srcSearch').value=src;
+  document.getElementById('srcList').classList.remove('on');
+  document.getElementById('selSrc').style.display='block';
+  document.getElementById('selSrcTxt').textContent=src;
+  applyFil();
+}
+
+function clearSrc(){
+  selSrc='';
+  document.getElementById('srcSearch').value='';
+  document.getElementById('selSrc').style.display='none';
+  applyFil();
+}
+
+// إغلاق القائمة عند النقر خارجها
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.src-wrap'))document.getElementById('srcList').classList.remove('on');
+});
+
+// ========== FILTER & START ==========
+function applyFil(){
+  let cat=document.getElementById('fCat').value;
+  let lvl=document.getElementById('fLvl').value;
+  filQs=allQs.filter(q=>{
+    if(cat&&q.category!==cat)return false;
+    if(lvl&&q.level!==lvl)return false;
+    if(selSrc&&q.source!==selSrc)return false;
+    return true;
+  });
+  document.getElementById('stF').textContent=filQs.length;
+}
+
+function resetFil(){
+  document.getElementById('fCat').value='';
+  document.getElementById('fLvl').value='';
+  clearSrc();
+  applyFil();
+}
+
+function startQz(){
+  if(filQs.length<5){toast('❌ يجب اختيار 5 أسئلة على الأقل','err');return}
+  curQs=shuffle([...filQs]).slice(0,Math.min(filQs.length,30));
+  curIdx=0;cor=0;wro=0;
+  document.getElementById('filPanel').style.display='none';
+  document.getElementById('progPanel').style.display='block';
+  document.getElementById('qzPanel').classList.add('on');
+  document.getElementById('resPanel').classList.remove('on');
+  updProg();
+  showQ();
+}
+
+// ========== QUIZ LOGIC ==========
+function showQ(){
+  let q=curQs[curIdx];
+  document.getElementById('qCat').textContent=q.category||'عام';
+  document.getElementById('qLvl').textContent=q.level||'-';
+  document.getElementById('qSrcTag').textContent=q.source||'غير محدد';
+  document.getElementById('qSrc').innerHTML='📖 المصدر: <span style="font-weight:600">'+esc(q.source||'غير محدد')+'</span>';
+  document.getElementById('qTxt').textContent=(curIdx+1)+'. '+esc(q.q);
+  let L=['أ','ب','ج','د'];
+  document.getElementById('qAns').innerHTML=q.a.map((a,i)=>
+    `<button class="ans-btn" id="ans${i}" onclick="ans(${i})">${L[i]}. ${esc(a)}</button>`
+  ).join('');
+}
+
+function ans(idx){
+  let q=curQs[curIdx];
+  let btns=document.querySelectorAll('.ans-btn');
+  btns.forEach(b=>b.classList.add('dis'));
+  if(idx===q.c){
+    btns[idx].classList.add('ok');
+    cor++;toast('✅ إجابة صحيحة!','ok');
+  }else{
+    btns[idx].classList.add('err');
+    btns[q.c].classList.add('ok');
+    wro++;toast('❌ الإجابة الصحيحة: '+['أ','ب','ج','د'][q.c],'err');
+  }
+  document.getElementById('stC').textContent=cor;
+  document.getElementById('stW').textContent=wro;
+  setTimeout(nextQ,1200);
+}
+
+function nextQ(){
+  curIdx++;
+  updProg();
+  if(curIdx>=curQs.length){finishQz();return}
+  showQ();
+}
+
+function updProg(){
+  let p=curIdx/curQs.length*100;
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progCur').textContent=curIdx+1;
+  document.getElementById('progTot').textContent=curQs.length;
+}
+
+function finishQz(){
+  document.getElementById('qzPanel').classList.remove('on');
+  document.getElementById('progPanel').style.display='none';
+  document.getElementById('resPanel').classList.add('on');
+  let pct=Math.round(cor/curQs.length*100);
+  document.getElementById('resSc').textContent=pct+'%';
+  document.getElementById('resDet').textContent=cor+' صحيحة من '+curQs.length;
+  let msg='';
+  if(pct>=90)msg='<div style="color:#2ecc71;font-size:18px;font-weight:700">🌟 ممتاز! أحسنت</div>';
+  else if(pct>=70)msg='<div style="color:#3498db;font-size:18px;font-weight:700">👍 جيد جداً</div>';
+  else if(pct>=50)msg='<div style="color:#f39c12;font-size:18px;font-weight:700">💪 يحتاج مراجعة</div>';
+  else msg='<div style="color:#e74c3c;font-size:18px;font-weight:700">📚 حاول مرة أخرى</div>';
+  document.getElementById('resMsg').innerHTML=msg;
+  // شهادة إذا 20+ سؤال و60%+
+  if(curQs.length>=20&&pct>=60){
+    document.getElementById('certPanel').style.display='block';
+    let certs=+(localStorage.getItem('total_certs')||0)+1;
+    localStorage.setItem('total_certs',certs);
+  }
+  let exams=+(localStorage.getItem('total_exams')||0)+1;
+  localStorage.setItem('total_exams',exams);
+}
+
+function restart(){
+  document.getElementById('resPanel').classList.remove('on');
+  document.getElementById('filPanel').style.display='block';
+  document.getElementById('certPanel').style.display='none';
+  applyFil();
+}
+
+// ========== CERTIFICATE ==========
+function dlCert(){
+  let name=localStorage.getItem('trainee_name')||'المتدرب';
+  let pct=Math.round(cor/curQs.length*100);
+  let html=`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>شهادة</title>
+  <style>@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+  body{font-family:'Amiri',serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f7fa;margin:0}
+  .cert{background:linear-gradient(135deg,#fff,#f8f9fa);border:8px solid #1a5f3c;padding:50px 60px;text-align:center;max-width:700px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.15);position:relative}
+  .cert::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:2px solid #2ecc71}
+  h1{color:#1a5f3c;font-size:32px;margin-bottom:10px}h2{color:#666;font-size:18px;margin-bottom:30px}
+  .name{font-size:28px;color:#14532d;font-weight:700;margin:20px 0}
+  .det{font-size:16px;color:#666;margin-bottom:20px;line-height:1.8}
+  .qr{width:100px;height:100px;margin:15px auto;background:#fff;padding:8px;border:1px solid #ddd}
+  .date{font-size:14px;color:#999;margin-top:20px}
+  .seal{position:absolute;top:30px;left:30px;width:80px;height:80px;background:#1a5f3c;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;transform:rotate(-15deg)}
+  </style></head><body>
+  <div class="cert"><div class="seal">معتمدة</div>
+  <h1>🎓 شهادة إتمام تدريب</h1>
+  <h2>أكاديمية الفقه والتفقه الإسلامي</h2>
+  <p>تُمنح هذه الشهادة إلى</p>
+  <div class="name">${esc(name)}</div>
+  <p class="det>لإتمام اختبار في <b>${esc(selSrc||'الفقه الإسلامي')}</b><br>بنسبة <b>${pct}%</b> (${cor} من ${curQs.length})</p>
+  <div class="qr"><svg viewBox="0 0 100 100"><rect fill="#1a5f3c" x="0" y="0" width="100" height="100"/><text fill="#fff" x="50" y="55" text-anchor="middle" font-size="10">فقه</text></svg></div>
+  <div class="date">${new Date().toLocaleDateString('ar-SA')}</div>
+  </div></body></html>`;
+  let blob=new Blob([html],{type:'text/html'});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement('a');
+  a.href=url;a.download='شهادة-'+name+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('📥 تم تحميل الشهادة','ok');
+}
+
+// ========== UTILS ==========
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(t){let d=document.createElement('div');d.textContent=t;return d.innerHTML}
+function toast(msg,tp){let c=document.getElementById('toastWrap'),d=document.createElement('div');d.className='toast '+tp;d.textContent=msg;c.appendChild(d);setTimeout(()=>d.remove(),3500)}
+
+// Start
+init();
+</script>
+</body>
+</html>
