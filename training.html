@@ -187,11 +187,15 @@ button:disabled{
 
 <!-- ====== حقل المصدر المميز ====== -->
 <div class="source-box">
-    <label for="sourceFilter">📚 اختر المصدر (الكتاب / المنهج)</label>
-    <select id="sourceFilter">
-        <option value="all">📖 كل المصادر</option>
-    </select>
-    <small style="color:#166534;">يتم تحديث القائمة تلقائياً حسب المصادر المتاحة في قاعدة البيانات</small>
+    <label for="sourceSearch">📚 ابحث عن المصدر (الكتاب / المنهج)</label>
+
+    <input id="sourceSearch" list="sourceList" placeholder="🔍 اكتب أو اختر المصدر">
+
+    <datalist id="sourceList"></datalist>
+
+    <small style="color:#166534;">
+        يتم تحديث القائمة تلقائياً حسب المصادر المتاحة في قاعدة البيانات
+    </small>
 </div>
 <!-- ================================ -->
 
