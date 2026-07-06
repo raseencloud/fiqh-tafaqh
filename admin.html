@@ -113,13 +113,13 @@ tr:hover td{background:#fafbfc}
 <nav class="side" id="side">
   <h1>⚙️ لوحة الإدارة<p>أكاديمية الفقه والتفقه</p></h1>
   <div class="nav-sec">الرئيسية</div>
-  <a href="#" class="nav-item on" onclick="show('dash');return false"><span class="icon">📊</span>اللوحة الرئيسية</a>
+  <a href="#" class="nav-item on" onclick="showSec('dash');return false"><span class="icon">📊</span>اللوحة الرئيسية</a>
   <div class="nav-sec">إدارة المحتوى</div>
   <a href="add-question.html" class="nav-item"><span class="icon">📝</span>إدارة بنك الأسئلة</a>
   <a href="home.html" class="nav-item"><span class="icon">🎓</span>معاينة المنصة</a>
   <div class="nav-sec">النظام</div>
-  <a href="#" class="nav-item" onclick="show('logs');return false"><span class="icon">📋</span>سجل العمليات</a>
-  <a href="#" class="nav-item" onclick="show('set');return false"><span class="icon">⚙️</span>الإعدادات</a>
+  <a href="#" class="nav-item" onclick="showSec('logs');return false"><span class="icon">📋</span>سجل العمليات</a>
+  <a href="#" class="nav-item" onclick="showSec('set');return false"><span class="icon">⚙️</span>الإعدادات</a>
   <div style="margin-top:auto;padding-top:15px;border-top:1px solid rgba(255,255,255,.1)">
     <a href="#" class="nav-item" style="color:#e74c3c" onclick="logout();return false"><span class="icon">🚪</span>خروج</a>
   </div>
@@ -199,12 +199,10 @@ tr:hover td{background:#fafbfc}
 const JSON_URL='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/fiqh-questions.json';
 let questions=[],auditLog=[];
 
-// Login system
+// Login system - Simple hash comparison
 const ADMIN_PASS_HASH = '21232f297a57a5a743894a0e4a801fc3'; // md5('admin')
 
 function md5(string) {
-    // Simple MD5 implementation for demo purposes
-    // In production, use a proper library
     function rotateLeft(lValue, iShiftBits) {
         return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
     }
@@ -275,7 +273,9 @@ function md5(string) {
         return wordToHexValue;
     }
     function utf8Encode(string) {
-        string = string.replace(/\r\n/g, '\n');
+        string = string.replace(/
+/g, '
+');
         var utftext = '';
         for (var n = 0; n < string.length; n++) {
             var c = string.charCodeAt(n);
@@ -471,7 +471,7 @@ function renderLogs(){
 }
 function clearLogs(){if(!confirm('مسح السجل؟'))return;auditLog=[];localStorage.removeItem('audit_log');renderLogs()}
 
-function show(id){
+function showSec(id){
   document.getElementById('sec-dash').style.display='none';
   document.getElementById('sec-logs').style.display='none';
   document.getElementById('sec-set').style.display='none';
