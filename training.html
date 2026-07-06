@@ -358,12 +358,12 @@ window.startExam = async function () {
 
     const cat = document.getElementById("categoryFilter").value;
 const lvl = document.getElementById("levelFilter").value;
-const src = document.getElementById("sourceFilter").value;
+const src = document.getElementById("sourceSearch").value.trim();
 
 let pool = allQuestions.filter(q =>
     (cat === "all" || q.category === cat) &&
     (lvl === "all" || q.level === lvl) &&
-    (src === "all" || q.source === src)
+    (src === "" || q.source === src)
 );
 
     if(pool.length === 0){
