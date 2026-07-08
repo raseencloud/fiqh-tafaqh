@@ -55,6 +55,26 @@ button:disabled{
     cursor:not-allowed;
 }
 
+/* ====== User Header Bar ====== */
+.user-bar{
+    max-width:900px;
+    margin:0 auto 16px;
+    background:linear-gradient(135deg,#065f46,#16a34a);
+    color:#fff;
+    padding:14px 20px;
+    border-radius:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    box-shadow:0 4px 16px rgba(22,163,74,.3);
+}
+.user-bar .u-info{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600}
+.user-bar .u-avatar{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.user-bar .u-stats{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.user-bar .u-stat{background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px}
+
 /* ====== حقل المصدر المميز ====== */
 .source-box {
     background: #ecfdf5;
@@ -246,7 +266,7 @@ button:disabled{
 .wrong-ans{color:#b91c1c;font-weight:bold;font-size:16px;}
 .correct-ans{color:#15803d;font-weight:bold;font-size:16px;}
 
-/* ====== الشهادة ====== */
+/* ====== الشهادة (بسيطة — للتوافق) ====== */
 #certificate{
     display:none;
     margin-top:20px;
@@ -271,23 +291,6 @@ button:disabled{
 #certificate span{
     font-weight:bold;
     color:#065f46;
-}
-
-/* ====== تنسيق الطباعة ====== */
-@media print {
-    body * { visibility: hidden !important; }
-    #certificate,
-    #certificate * { visibility: visible !important; }
-    #certificate {
-        position: absolute !important;
-        top: 0;
-        left: 0;
-        width: 100%;
-        border:8px double #166534 !important;
-        padding:40px !important;
-    }
-    #quiz { display: none !important; }
-    .result-box { display: none !important; }
 }
 
 /* ====== Toast ====== */
@@ -317,6 +320,25 @@ button:disabled{
 .toast.err{background:#dc2626}
 .toast.inf{background:#065f46}
 
+/* ====== Progress Save Indicator ====== */
+.save-ind{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    background:#065f46;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:700;
+    z-index:2000;
+    display:none;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 4px 16px rgba(0,0,0,.2);
+}
+.save-ind.on{display:flex}
+
 /* ====== Responsive ====== */
 @media(max-width:768px){
     body{padding:10px}
@@ -326,12 +348,29 @@ button:disabled{
     #certificate{padding:20px}
     #certificate h2{font-size:24px}
     #certificate p{font-size:16px}
+    .user-bar{flex-direction:column;text-align:center}
+    .user-bar .u-stats{justify-content:center}
 }
 </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 
 <body>
+
+<!-- User Progress Bar -->
+<div class="user-bar" id="userBar" style="display:none">
+  <div class="u-info">
+    <div class="u-avatar" id="uAvatar">👤</div>
+    <span id="uName">متدرب</span>
+  </div>
+  <div class="u-stats">
+    <div class="u-stat">📊 <span id="uAnswered">0</span> سؤال</div>
+    <div class="u-stat">✅ <span id="uCorrect">0</span> صحيحة</div>
+    <div class="u-stat">🏆 <span id="uRate">0%</span></div>
+    <div class="u-stat">🎓 <span id="uCerts">0</span> شهادة</div>
+  </div>
+</div>
 
 <div style="display:flex;justify-content:space-between;align-items:center;max-width:780px;margin:0 auto 20px;flex-wrap:wrap;gap:10px">
   <a href="index.html" style="background:#16a34a;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">🏠 العودة للرئيسية</a>
@@ -365,15 +404,13 @@ button:disabled{
     <option value="صعب">🔴 صعب</option>
 </select>
 
-<!-- ====== حقل المصدر - بحث ذكي محسّن ====== -->
+<!-- ====== حقل المصدر - بحث ذكي ====== -->
 <div class="source-box">
     <label for="sourceSearch">📚 ابحث عن المصدر (الكتاب / المنهج)</label>
     <input id="sourceSearch" placeholder="🔍 اكتب اسم المصدر..." autocomplete="off" oninput="onSrcInput(this.value)" onfocus="onSrcFocus()">
 
-    <!-- قائمة المصادر المنسدلة -->
     <div class="src-dropdown" id="srcDropdown"></div>
 
-    <!-- المصدر المختار -->
     <div class="src-selected" id="srcSelectedBox">
         <span>✅ المصدر المختار: <span id="srcSelectedName"></span></span>
         <button class="src-clear" onclick="clearSrc()">❌ إلغاء</button>
@@ -399,7 +436,7 @@ button:disabled{
 
 <div id="quiz"></div>
 
-<!-- ====== الشهادة ====== -->
+<!-- ====== الشهادة (للتوافق) ====== -->
 <div id="certificate">
     <h2>🎓 شهادة إتمام الاختبار</h2>
     <p>اسم المتدرب: <span id="certName"></span></p>
@@ -411,10 +448,72 @@ button:disabled{
     <p style="font-size:14px;color:#999" id="certDate"></p>
 </div>
 
+<!-- Save Indicator -->
+<div class="save-ind" id="saveInd">💾 تم حفظ تقدمك</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
 "use strict";
+
+/* =========================
+   USER SYSTEM
+========================= */
+let currentUser = null;
+let userProgress = { totalAnswered: 0, totalCorrect: 0, totalCerts: 0, exams: [] };
+
+function initUser(){
+  const saved = localStorage.getItem('fiqh_user');
+  if(saved){
+    try{ currentUser = JSON.parse(saved); }catch(e){ currentUser = null; }
+  }
+
+  // Load user progress
+  if(currentUser && currentUser.email){
+    const prog = localStorage.getItem('fiqh_progress_' + currentUser.email);
+    if(prog){
+      try{ userProgress = JSON.parse(prog); }catch(e){ userProgress = { totalAnswered: 0, totalCorrect: 0, totalCerts: 0, exams: [] }; }
+    }
+    updateUserBar();
+  }
+
+  // Pre-fill name if user exists
+  if(currentUser && currentUser.name){
+    document.getElementById('candidateName').value = currentUser.name;
+  }
+}
+
+function updateUserBar(){
+  const bar = document.getElementById('userBar');
+  if(!currentUser){
+    bar.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = 'flex';
+  document.getElementById('uName').textContent = currentUser.name;
+  document.getElementById('uAvatar').textContent = currentUser.name.charAt(0);
+  document.getElementById('uAnswered').textContent = userProgress.totalAnswered || 0;
+  document.getElementById('uCorrect').textContent = userProgress.totalCorrect || 0;
+
+  const rate = userProgress.totalAnswered > 0 ? Math.round((userProgress.totalCorrect / userProgress.totalAnswered) * 100) : 0;
+  document.getElementById('uRate').textContent = rate + '%';
+  document.getElementById('uCerts').textContent = userProgress.totalCerts || 0;
+}
+
+function saveUserProgress(){
+  if(currentUser && currentUser.email){
+    localStorage.setItem('fiqh_progress_' + currentUser.email, JSON.stringify(userProgress));
+    showSaveInd();
+    updateUserBar();
+  }
+}
+
+function showSaveInd(){
+  const ind = document.getElementById('saveInd');
+  ind.classList.add('on');
+  setTimeout(()=>ind.classList.remove('on'), 2000);
+}
 
 /* =========================
    STATE
@@ -424,7 +523,7 @@ let questions = [];
 let current = 0;
 let score = 0;
 let candidateName = "";
-let selectedCount = 3;  // الافتراضي 3 أسئلة
+let selectedCount = 3;
 let answered = false;
 let userAnswers = [];
 let selSrc = "";
@@ -435,19 +534,19 @@ const MIN_CERT_QUESTIONS = 20;
 const JSON_URL = "https://raw.githubusercontent.com/ieashehata1965-netizen/fiqh-tafaqh/main/fiqh-questions.json";
 
 /* =========================
-   INIT - تحميل فوري عند فتح الصفحة
+   INIT - تحميل فوري
 ========================= */
 (function(){
     const savedName = localStorage.getItem('trainee_name');
     if(savedName){
         document.getElementById("candidateName").value = savedName;
     }
-    // تحميل الأسئلة فوراً لبناء قائمة المصادر
+    initUser();
     loadQuestionsSilent();
 })();
 
 /* =========================
-   LOAD QUESTIONS - صامت (بدون alert)
+   LOAD QUESTIONS - صامت
 ========================= */
 async function loadQuestionsSilent() {
     try {
@@ -459,7 +558,6 @@ async function loadQuestionsSilent() {
 
         allQuestions = raw.map(normalize).filter(Boolean);
 
-        // إزالة التكرارات
         const seen = new Set();
         allQuestions = allQuestions.filter(q => {
             const k = (q.q + "").toLowerCase().trim();
@@ -486,14 +584,12 @@ async function loadQuestionsSilent() {
    BUILD SOURCE LIST
 ========================= */
 function buildSrcList(){
-    // عدد الأسئلة لكل مصدر
     const counts = {};
     allQuestions.forEach(q => {
         const s = q.source || 'غير محدد';
         counts[s] = (counts[s] || 0) + 1;
     });
 
-    // ترتيب المصادر: المحددة أولاً ثم حسب عدد الأسئلة تنازلياً
     srcListData = Object.keys(counts).sort((a, b) => {
         if(a === 'غير محدد') return 1;
         if(b === 'غير محدد') return -1;
@@ -565,7 +661,6 @@ function clearSrc(){
     document.getElementById('srcHint').textContent = '✅ تم تحميل ' + srcListData.length + ' مصدر — اكتب للبحث أو انقر للاختيار';
 }
 
-// إغلاق القائمة عند النقر خارجها
 document.addEventListener('click', function(e){
     if(!e.target.closest('.source-box')){
         document.getElementById('srcDropdown').classList.remove('on');
@@ -621,7 +716,6 @@ window.startExam = async function () {
     btn.disabled = true;
     btn.textContent = "⏳ جاري التحضير...";
 
-    // إذا لم تُحمّل البيانات بعد، نحاول مرة أخرى
     if(!dataLoaded){
         toast("⏳ جاري تحميل الأسئلة...", "inf");
         await loadQuestionsSilent();
@@ -715,6 +809,14 @@ function answer(i){
             boxes[q.c].innerHTML += " ✅";
         }
     }
+
+    // Save progress for registered users
+    if(currentUser){
+        userProgress.totalAnswered++;
+        if(i === q.c) userProgress.totalCorrect++;
+        saveUserProgress();
+    }
+
     setTimeout(() => {
         current++;
         showQuestion();
@@ -756,19 +858,29 @@ function showResult(){
     let totalExams = parseInt(localStorage.getItem('total_exams') || '0', 10);
     localStorage.setItem('total_exams', totalExams + 1);
 
+    // Save exam to user progress
+    if(currentUser){
+        userProgress.exams = userProgress.exams || [];
+        userProgress.exams.push({
+            date: new Date().toISOString(),
+            total: total,
+            score: score,
+            percent: percent,
+            category: document.getElementById("categoryFilter").value
+        });
+        saveUserProgress();
+    }
+
     let certHtml = '';
     if(showCertificate){
         let totalCerts = parseInt(localStorage.getItem('total_certs') || '0', 10);
         localStorage.setItem('total_certs', totalCerts + 1);
 
-        const certId = "FIQH-" + Date.now();
-        document.getElementById("certName").textContent = candidateName;
-        document.getElementById("score").textContent = score;
-        document.getElementById("total").textContent = total;
-        document.getElementById("percent").textContent = percent;
-        document.getElementById("certId").textContent = certId;
-        document.getElementById("certDate").textContent = new Date().toLocaleDateString('ar-SA');
-        document.getElementById("certificate").style.display = "block";
+        // Update user certs
+        if(currentUser){
+            userProgress.totalCerts = (userProgress.totalCerts || 0) + 1;
+            saveUserProgress();
+        }
 
         certHtml = `
             <div style="background:linear-gradient(135deg,#ecfdf5,#dcfce7);border:3px solid #16a34a;border-radius:16px;padding:24px;margin:20px 0;text-align:center">
@@ -776,12 +888,11 @@ function showResult(){
                 <h3 style="color:#065f46;font-size:22px;margin-bottom:8px">تهانينا! لقد حصلت على شهادة إتمام</h3>
                 <p style="color:#166534;font-size:16px">لأنك أجبت على ${total} سؤال بنسبة نجاح ${percent}%</p>
                 <button onclick="printCertificate()" style="margin-top:16px;padding:14px 32px;font-size:18px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:bold;box-shadow:0 4px 16px rgba(22,163,74,.3)">
-                    🖨️ طباعة الشهادة
+                    🖨️ فتح وطباعة الشهادة
                 </button>
             </div>
         `;
     } else {
-        document.getElementById("certificate").style.display = "none";
         certHtml = `
             <div style="background:#fef2f2;border:2px solid #fecaca;border-radius:12px;padding:18px;margin:16px 0;color:#b91c1c;font-weight:bold;font-size:16px">
                 📝 لا تتوفر شهادة إلا عند حل ${MIN_CERT_QUESTIONS} سؤالًا فأكثر بنسبة نجاح 60%
@@ -828,13 +939,27 @@ function showResult(){
         </div>
     `;
     window.scrollTo(0,0);
+
+    // Update user bar after exam
+    updateUserBar();
 }
 
 /* =========================
-   PRINT CERTIFICATE
+   PRINT CERTIFICATE - يفتح شهادتك الجاهزة
 ========================= */
 function printCertificate(){
-    window.print();
+    const certId = "FIQH-" + Date.now();
+    const percent = Math.round((score / questions.length) * 100);
+
+    // بناء رابط الشهادة مع البيانات
+    const certUrl = 'certificate.html' +
+        '?name=' + encodeURIComponent(candidateName) +
+        '&score=' + score +
+        '&total=' + questions.length +
+        '&id=' + certId;
+
+    // فتح الشهادة في تبويب جديد
+    window.open(certUrl, '_blank');
 }
 
 /* =========================
@@ -847,7 +972,7 @@ function esc(t){
 }
 
 function escJS(s){
-    return "'" + s.replace(/'/g, "\\'") + "'";
+    return "'" + s.replace(/'/g, "\'") + "'";
 }
 
 function toast(msg, tp){
