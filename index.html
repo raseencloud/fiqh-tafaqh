@@ -20,6 +20,11 @@ a{text-decoration:none;color:inherit}
 .nav .btn{background:linear-gradient(135deg,#1a5f3c,#14532d);color:#fff!important;border-radius:50px!important}
 .mob-btn{display:none;background:none;border:none;font-size:24px;cursor:pointer}
 
+/* User badge in navbar */
+.user-badge{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:6px 14px;border-radius:50px;border:1px solid #bbf7d0;font-size:13px;font-weight:600;color:#065f46;cursor:pointer;transition:.3s}
+.user-badge:hover{background:#dcfce7}
+.user-badge .avatar{width:28px;height:28px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+
 /* Hero */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 20px 60px;background:linear-gradient(135deg,#f0fdf4,#d1fae5);text-align:center}
 .hero-in{max-width:700px}
@@ -89,6 +94,47 @@ a{text-decoration:none;color:inherit}
 .mod-box input:focus{outline:none;border-color:#1a5f3c}
 .mod-close{position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280}
 
+/* ====== Registration Modal Styles ====== */
+.reg-mod{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px}
+.reg-mod.on{display:flex}
+.reg-box{background:#fff;padding:32px;border-radius:20px;max-width:480px;width:100%;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.reg-box h2{font-size:22px;color:#14532d;margin-bottom:6px;text-align:center;font-weight:800}
+.reg-box .sub{color:#6b7280;font-size:14px;text-align:center;margin-bottom:24px}
+.reg-close{position:absolute;top:16px;left:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s}
+.reg-close:hover{background:#f3f4f6}
+.reg-field{margin-bottom:16px}
+.reg-field label{display:block;font-size:13px;font-weight:700;color:#065f46;margin-bottom:6px}
+.reg-field label .req{color:#dc2626}
+.reg-field input,.reg-field select{width:100%;padding:12px 14px;border:2px solid #d1fae5;border-radius:12px;font-size:15px;font-family:inherit;color:#065f46;background:#fff;transition:.2s}
+.reg-field input:focus,.reg-field select:focus{outline:none;border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.1)}
+.reg-field input::placeholder{color:#9ca3af}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.reg-btns{display:flex;gap:10px;margin-top:24px}
+.reg-btns button{flex:1;padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s}
+.reg-btns .reg-btn-p{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.reg-btns .reg-btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(22,163,74,.4)}
+.reg-btns .reg-btn-s{background:#f3f4f6;color:#6b7280}
+.reg-btn-s:hover{background:#e5e7eb}
+.reg-guest{text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb}
+.reg-guest button{background:none;border:none;color:#16a34a;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline}
+.reg-guest button:hover{color:#15803d}
+.reg-error{color:#dc2626;font-size:13px;font-weight:700;margin-top:-8px;margin-bottom:12px;display:none;text-align:right}
+
+/* User dropdown menu */
+.user-menu{position:absolute;top:55px;left:10px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.15);padding:8px;min-width:180px;display:none;z-index:1001;border:1px solid #e5e7eb}
+.user-menu.on{display:block}
+.user-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;color:#374151;cursor:pointer;transition:.2s}
+.user-menu-item:hover{background:#f0fdf4;color:#065f46}
+.user-menu-hr{margin:6px 0;border:none;border-top:1px solid #e5e7eb}
+
+/* Progress section for registered users */
+.prog-sec{background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:40px 20px;margin:40px 0;border-radius:20px;border:2px solid #bbf7d0}
+.prog-sec h2{text-align:center;color:#065f46;font-size:24px;font-weight:800;margin-bottom:24px}
+.prog-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.prog-card{background:#fff;padding:24px;border-radius:16px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.prog-card .n{font-size:36px;font-weight:800;color:#16a34a}
+.prog-card .l{font-size:14px;color:#6b7280;margin-top:4px;font-weight:600}
+
 /* Mobile */
 @media(max-width:768px){
 .nav-links{display:none;position:absolute;top:65px;left:0;right:0;background:#fff;padding:16px;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,.1)}
@@ -96,19 +142,24 @@ a{text-decoration:none;color:inherit}
 .mob-btn{display:block}
 .hero{padding-top:80px}
 .stats-in{grid-template-columns:repeat(2,1fr)}
+.reg-grid{grid-template-columns:1fr}
+.user-menu{left:auto;right:10px}
 }
 </style>
+
 <base target="_blank">
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="nav-in">
-    <a href="#" class="logo"><span>📖</span>أكاديمية الفقه والتفقه</a>
+    <a href="index.html" class="logo"><span>📖</span>أكاديمية الفقه والتفقه</a>
     <div class="nav-links" id="navLinks">
       <a href="#feat">المميزات</a>
       <a href="#vis">عن المنصة</a>
-      <a href="#" class="btn" onclick="openMod();return false">🎯 ابدأ التدريب</a>
+      <a href="training.html" class="btn">🎯 ابدأ التدريب</a>
+      <!-- User badge will be inserted here by JS -->
+      <span id="navUserArea"></span>
     </div>
     <button class="mob-btn" onclick="document.getElementById('navLinks').classList.toggle('on')">☰</button>
   </div>
@@ -132,6 +183,29 @@ a{text-decoration:none;color:inherit}
     <div><h3 id="stC">0</h3><p>تصنيف علمي</p></div>
     <div><h3 id="stE">0</h3><p>اختبار منجز</p></div>
     <div><h3 id="stR">0</h3><p>شهادة مصدقة</p></div>
+  </div>
+</section>
+
+<!-- Progress Section (shown only for registered trainees) -->
+<section class="prog-sec" id="progSec" style="display:none">
+  <h2>📊 تقدمك التعليمي</h2>
+  <div class="prog-grid">
+    <div class="prog-card">
+      <div class="n" id="progAns">0</div>
+      <div class="l">سؤال أجبت عليه</div>
+    </div>
+    <div class="prog-card">
+      <div class="n" id="progCorrect">0</div>
+      <div class="l">إجابة صحيحة</div>
+    </div>
+    <div class="prog-card">
+      <div class="n" id="progRate">0%</div>
+      <div class="l">نسبة النجاح</div>
+    </div>
+    <div class="prog-card">
+      <div class="n" id="progCerts">0</div>
+      <div class="l">شهادات محصل عليها</div>
+    </div>
   </div>
 </section>
 
@@ -216,8 +290,9 @@ a{text-decoration:none;color:inherit}
     <div>
       <h4>🔗 روابط سريعة</h4>
       <a href="training.html">🎯 التدريب</a>
-      <a href="admin.html">⚙️ لوحة الإدارة</a>
-      <a href="add-question.html">📝 إدارة الأسئلة</a>
+      <!-- Admin links hidden from normal users -->
+      <a href="admin.html" class="admin-link" style="display:none">⚙️ لوحة الإدارة</a>
+      <a href="add-question.html" class="admin-link" style="display:none">📝 إدارة الأسئلة</a>
     </div>
     <div>
       <h4>📋 معلومات</h4>
@@ -232,6 +307,7 @@ a{text-decoration:none;color:inherit}
   <div class="foot-bot">© 2025 أكاديمية الفقه والتفقه الإسلامي</div>
 </footer>
 
+<!-- Name Modal (for quick start) -->
 <div class="mod" id="mod" onclick="if(event.target===this)closeMod()">
   <div class="mod-box">
     <button class="mod-close" onclick="closeMod()">✕</button>
@@ -242,9 +318,231 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<!-- Registration Modal -->
+<div class="reg-mod" id="regMod" onclick="if(event.target===this)closeRegMod()">
+  <div class="reg-box">
+    <button class="reg-close" onclick="closeRegMod()">✕</button>
+    <h2>👤 تسجيل كمتدرب</h2>
+    <p class="sub">سجّل بياناتك لحفظ تقدمك وشهاداتك</p>
+
+    <div class="reg-field">
+      <label>الاسم الكريم <span class="req">*</span></label>
+      <input type="text" id="regName" placeholder="محمد أحمد" maxlength="50">
+    </div>
+
+    <div class="reg-field">
+      <label>البريد الإلكتروني <span class="req">*</span></label>
+      <input type="email" id="regEmail" placeholder="example@email.com" maxlength="100">
+    </div>
+
+    <div class="reg-grid">
+      <div class="reg-field">
+        <label>العمر</label>
+        <input type="number" id="regAge" placeholder="25" min="5" max="120">
+      </div>
+      <div class="reg-field">
+        <label>الجنس</label>
+        <select id="regGender">
+          <option value="">اختر...</option>
+          <option value="ذكر">ذكر</option>
+          <option value="أنثى">أنثى</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="reg-field">
+      <label>أعلى شهادة دراسية</label>
+      <select id="regEdu">
+        <option value="">اختر...</option>
+        <option value="ابتدائي">ابتدائي</option>
+        <option value="متوسط">متوسط</option>
+        <option value="ثانوي">ثانوي</option>
+        <option value="جامعي">جامعي</option>
+        <option value="ماجستير">ماجستير</option>
+        <option value="دكتوراه">دكتوراه</option>
+      </select>
+    </div>
+
+    <div class="reg-error" id="regError">⚠️ يرجى ملء الاسم والبريد الإلكتروني بشكل صحيح</div>
+
+    <div class="reg-btns">
+      <button class="reg-btn-s" onclick="closeRegMod()">إلغاء</button>
+      <button class="reg-btn-p" onclick="doRegister()">💾 تسجيل</button>
+    </div>
+
+    <div class="reg-guest">
+      <button onclick="enterAsGuest()">👤 الدخول كزائر بدون تسجيل</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SITE='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/';
 const JSON_URL='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/fiqh-questions.json';
+
+// ====== USER SYSTEM ======
+let currentUser = null;
+
+function initUser(){
+  const saved = localStorage.getItem('fiqh_user');
+  if(saved){
+    try{ currentUser = JSON.parse(saved); }catch(e){ currentUser = null; }
+  }
+  updateNavUser();
+  updateProgress();
+}
+
+function updateNavUser(){
+  const area = document.getElementById('navUserArea');
+  if(!area) return;
+
+  if(currentUser && currentUser.name){
+    // Show user badge with dropdown
+    area.innerHTML = `
+      <div style="position:relative;display:inline-block">
+        <div class="user-badge" onclick="toggleUserMenu()">
+          <div class="avatar">${currentUser.name.charAt(0)}</div>
+          <span>${currentUser.name}</span>
+          <span style="font-size:10px">▼</span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-menu-item" onclick="openRegMod()">✏️ تعديل بياناتي</div>
+          <div class="user-menu-item" onclick="goToTraining()">🎯 ابدأ التدريب</div>
+          <div class="user-menu-hr"></div>
+          <div class="user-menu-item" onclick="logoutUser()" style="color:#dc2626">🚪 تسجيل الخروج</div>
+        </div>
+      </div>
+    `;
+  } else {
+    // Show login button
+    area.innerHTML = `<a href="#" class="btn" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff!important" onclick="openRegMod();return false">👤 تسجيل الدخول</a>`;
+  }
+}
+
+function toggleUserMenu(){
+  const menu = document.getElementById('userMenu');
+  if(menu) menu.classList.toggle('on');
+}
+
+// Close user menu when clicking outside
+document.addEventListener('click', function(e){
+  const menu = document.getElementById('userMenu');
+  const badge = document.querySelector('.user-badge');
+  if(menu && badge && !badge.contains(e.target) && !menu.contains(e.target)){
+    menu.classList.remove('on');
+  }
+});
+
+function openRegMod(){
+  document.getElementById('regMod').classList.add('on');
+  document.getElementById('regError').style.display = 'none';
+
+  // Pre-fill if user exists
+  if(currentUser){
+    document.getElementById('regName').value = currentUser.name || '';
+    document.getElementById('regEmail').value = currentUser.email || '';
+    document.getElementById('regAge').value = currentUser.age || '';
+    document.getElementById('regGender').value = currentUser.gender || '';
+    document.getElementById('regEdu').value = currentUser.education || '';
+  }
+
+  setTimeout(()=>document.getElementById('regName').focus(),100);
+}
+
+function closeRegMod(){
+  document.getElementById('regMod').classList.remove('on');
+}
+
+function doRegister(){
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const age = document.getElementById('regAge').value;
+  const gender = document.getElementById('regGender').value;
+  const education = document.getElementById('regEdu').value;
+  const errorEl = document.getElementById('regError');
+
+  // Validation
+  if(!name || name.length < 2){
+    errorEl.textContent = '⚠️ الاسم مطلوب (حرفين على الأقل)';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  if(!email || !email.includes('@') || !email.includes('.')){
+    errorEl.textContent = '⚠️ أدخل بريد إلكتروني صحيح';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  // Save user
+  currentUser = {
+    name,
+    email,
+    age: age || null,
+    gender: gender || null,
+    education: education || null,
+    registeredAt: new Date().toISOString()
+  };
+
+  localStorage.setItem('fiqh_user', JSON.stringify(currentUser));
+  localStorage.setItem('trainee_name', name); // for backward compatibility
+
+  errorEl.style.display = 'none';
+  closeRegMod();
+  updateNavUser();
+  updateProgress();
+
+  // Show welcome toast (simple alert for now)
+  setTimeout(()=>{
+    alert('✅ مرحباً ' + name + '! تم تسجيلك بنجاح. تقدمك سيُحفظ تلقائياً.');
+  }, 300);
+}
+
+function enterAsGuest(){
+  closeRegMod();
+  // Just close modal, user stays as guest
+}
+
+function logoutUser(){
+  if(!confirm('هل تريد تسجيل الخروج؟ سيتم حفظ تقدمك.')) return;
+  currentUser = null;
+  localStorage.removeItem('fiqh_user');
+  localStorage.removeItem('trainee_name');
+  updateNavUser();
+  updateProgress();
+  document.getElementById('userMenu')?.classList.remove('on');
+}
+
+function goToTraining(){
+  window.location.href = 'training.html';
+}
+
+// Update progress section
+function updateProgress(){
+  const sec = document.getElementById('progSec');
+  if(!sec) return;
+
+  if(!currentUser){
+    sec.style.display = 'none';
+    return;
+  }
+
+  // Get progress from localStorage
+  const progress = JSON.parse(localStorage.getItem('fiqh_progress_' + currentUser.email) || '{}');
+  const totalAnswered = progress.totalAnswered || 0;
+  const totalCorrect = progress.totalCorrect || 0;
+  const totalCerts = progress.totalCerts || 0;
+  const rate = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+
+  document.getElementById('progAns').textContent = totalAnswered;
+  document.getElementById('progCorrect').textContent = totalCorrect;
+  document.getElementById('progRate').textContent = rate + '%';
+  document.getElementById('progCerts').textContent = totalCerts;
+
+  sec.style.display = 'block';
+}
+
+// ====== EXISTING CODE (preserved) ======
 
 // Navbar scroll
 window.onscroll=()=>document.getElementById('nav').style.boxShadow=window.scrollY>50?'0 4px 20px rgba(0,0,0,.1)':'none';
@@ -260,7 +558,9 @@ anim('stE',+(localStorage.getItem('total_exams')||0));
 anim('stR',+(localStorage.getItem('total_certs')||0));
 
 function anim(id,tgt){
-  let el=document.getElementById(id),c=0,step=Math.ceil(tgt/25);
+  let el=document.getElementById(id);
+  if(!el)return;
+  let c=0,step=Math.ceil(tgt/25);
   let iv=setInterval(()=>{c+=step;if(c>=tgt){c=tgt;clearInterval(iv)}el.textContent=c.toLocaleString('ar-SA')},40);
 }
 
@@ -280,10 +580,11 @@ function sh(p){
 function cpLink(){navigator.clipboard.writeText(SITE).then(()=>alert('✅ تم النسخ')).catch(()=>{let i=document.createElement('input');i.value=SITE;document.body.appendChild(i);i.select();document.execCommand('copy');document.body.removeChild(i);alert('✅ تم النسخ')})}
 
 // Intersection Observer for animations
-let obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.style.opacity=1}),{threshold:.1});
+let obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='translateY(0)'}}),{threshold:.1});
 document.querySelectorAll('.card,.vis-box').forEach(el=>{el.style.opacity=0;el.style.transition='opacity .6s,transform .6s';el.style.transform='translateY(20px)';obs.observe(el)});
-obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='translateY(0)'}}));
-document.querySelectorAll('.card,.vis-box').forEach(el=>obs.observe(el));
+
+// Init user system on load
+initUser();
 </script>
 
 </body>
