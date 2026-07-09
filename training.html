@@ -836,7 +836,7 @@ function showResult(){
         percent >= 60 ? "✅ جيد" :
         "📚 يحتاج تطوير";
 
-    const showCertificate = selectedCount >= MIN_CERT_QUESTIONS && percent >= 60;
+    const showCertificate = selectedCount >= MIN_CERT_QUESTIONS && percent >= 70;
 
     let wrongAnswersHTML = "";
     questions.forEach((q, index) => {
