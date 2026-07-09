@@ -612,5 +612,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (sessionStorage.getItem("admin_access") === "granted") {
+        document.querySelectorAll(".admin-link").forEach(function(link) {
+            link.style.display = "block";
+        });
+    }
+});
+</script>
 </body>
 </html>
