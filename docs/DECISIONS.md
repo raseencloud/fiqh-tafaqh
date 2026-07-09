@@ -8,4 +8,4 @@
 
 هذه القرارات غالبًا تُنسى مع مرور الوقت، لكن توثيقها يجعل المشروع أكثر نضجًا ويسهل أي تطوير أو انتقال لفريق آخر في المستقبل.
 
-<img width="1086" height="1448" alt="image" src="https://github.com/user-attachments/assets/274d7fdb-e830-4f37-9c14-2082e623ae19" />
+<img width="1055" height="1491" alt="image" src="https://github.com/user-attachments/assets/070c6719-af39-4a55-9a93-a5b7f8a81968" />
