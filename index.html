@@ -3,54 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="أكاديمية الفقه والتفقه الإسلامي - منصة تعليمية شرعية غير ربحية">
-<meta name="theme-color" content="#123A6F">
 <title>أكاديمية الفقه والتفقه الإسلامي</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f8fafc;color:#1f2937;line-height:1.7}
+a{text-decoration:none;color:inherit}
 
-<!-- Google Fonts: Cairo -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+/* Navbar */
+.nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.05);z-index:1000;padding:0 20px}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:65px}
+.logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:#1a5f3c}
+.logo span{width:36px;height:36px;background:linear-gradient(135deg,#1a5f3c,#2ecc71);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav a{padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:.3s}
+.nav a:hover{background:rgba(26,95,60,.08);color:#1a5f3c}
+.nav .btn{background:linear-gradient(135deg,#1a5f3c,#14532d);color:#fff!important;border-radius:50px!important}
+.mob-btn{display:none;background:none;border:none;font-size:24px;cursor:pointer}
 
-<!-- Design System CSS Files -->
-<link rel="stylesheet" href="variables.css">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="components.css">
-<link rel="stylesheet" href="layout.css">
+/* User badge in navbar */
+.user-badge{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:6px 14px;border-radius:50px;border:1px solid #bbf7d0;font-size:13px;font-weight:600;color:#065f46;cursor:pointer;transition:.3s}
+.user-badge:hover{background:#dcfce7}
+.user-badge .avatar{width:28px;height:28px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
 
-<base target="_blank">
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 20px 60px;background:linear-gradient(135deg,#f0fdf4,#d1fae5);text-align:center}
+.hero-in{max-width:700px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,95,60,.1);color:#1a5f3c;padding:6px 16px;border-radius:50px;font-size:13px;font-weight:600;margin-bottom:20px}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;color:#14532d;line-height:1.3;margin-bottom:16px}
+.hero h1 span{color:#2ecc71}
+.hero p{color:#6b7280;font-size:17px;margin-bottom:28px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:13px 28px;border-radius:50px;font-size:15px;font-weight:600;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:.3s}
+.btn-p{background:linear-gradient(135deg,#1a5f3c,#14532d);color:#fff;box-shadow:0 4px 15px rgba(26,95,60,.3)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(26,95,60,.4)}
+.btn-s{background:#fff;color:#1a5f3c;border:2px solid #1a5f3c}
+.btn-s:hover{background:#1a5f3c;color:#fff}
+
+/* Stats */
+.stats{background:#fff;padding:35px 20px}
+.stats-in{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;text-align:center}
+.stats h3{font-size:28px;font-weight:800;color:#1a5f3c}
+.stats p{font-size:13px;color:#6b7280}
+
+/* Features */
+.sec{padding:70px 20px;max-width:1200px;margin:0 auto}
+.sec h2{text-align:center;font-size:28px;font-weight:800;color:#14532d;margin-bottom:10px}
+.sec > p{text-align:center;color:#6b7280;margin-bottom:40px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:#fff;padding:28px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:center;transition:.3s;border:1px solid rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,.12)}
+.card .ic{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{font-size:14px;color:#6b7280;margin-bottom:12px}
+.card a{color:#1a5f3c;font-weight:600;font-size:14px}
+.card a:hover{color:#14532d}
+
+/* Vision */
+.vis{background:linear-gradient(135deg,#14532d,#1a5f3c);color:#fff;padding:70px 20px;position:relative}
+.vis::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.vis-in{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;position:relative;z-index:1}
+.vis-box{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,.2)}
+.vis-box h3{font-size:18px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.vis-box p,.vis-box li{font-size:14px;opacity:.9;line-height:1.8}
+.vis-box ul{padding-right:18px;margin-top:10px}
+.vis-box li{margin-bottom:6px}
+
+/* Share */
+.share{text-align:center;padding:50px 20px;background:#fff}
+.share h3{font-size:18px;margin-bottom:20px}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.share-btns a,.share-btns button{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;transition:.3s;border:none;cursor:pointer}
+.share-btns a:hover,.share-btns button:hover{transform:translateY(-3px) scale(1.1)}
+.s-wa{background:#25d366}.s-tg{background:#08c}.s-fb{background:#1877f2}.s-x{background:#000}.s-link{background:#1a5f3c}
+
+/* Footer */
+.foot{background:#1a1a2e;color:rgba(255,255,255,.7);padding:50px 20px 20px}
+.foot-in{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:30px;margin-bottom:30px}
+.foot h4{color:#fff;font-size:15px;margin-bottom:14px}
+.foot a,.foot p{display:block;font-size:13px;margin-bottom:8px;transition:.3s}
+.foot a:hover{color:#2ecc71}
+.foot-bot{text-align:center;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.4)}
+
+/* Modal */
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+.mod.on{display:flex}
+.mod-box{background:#fff;padding:28px;border-radius:16px;max-width:400px;width:100%;text-align:center;position:relative}
+.mod-box h3{font-size:18px;color:#14532d;margin-bottom:6px}
+.mod-box p{color:#6b7280;font-size:14px;margin-bottom:20px}
+.mod-box input{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:12px;font-size:15px;font-family:inherit;margin-bottom:16px;text-align:center}
+.mod-box input:focus{outline:none;border-color:#1a5f3c}
+.mod-close{position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280}
+
+/* ====== Registration Modal Styles ====== */
+.reg-mod{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px}
+.reg-mod.on{display:flex}
+.reg-box{background:#fff;padding:32px;border-radius:20px;max-width:480px;width:100%;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.reg-box h2{font-size:22px;color:#14532d;margin-bottom:6px;text-align:center;font-weight:800}
+.reg-box .sub{color:#6b7280;font-size:14px;text-align:center;margin-bottom:24px}
+.reg-close{position:absolute;top:16px;left:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s}
+.reg-close:hover{background:#f3f4f6}
+.reg-field{margin-bottom:16px}
+.reg-field label{display:block;font-size:13px;font-weight:700;color:#065f46;margin-bottom:6px}
+.reg-field label .req{color:#dc2626}
+.reg-field input,.reg-field select{width:100%;padding:12px 14px;border:2px solid #d1fae5;border-radius:12px;font-size:15px;font-family:inherit;color:#065f46;background:#fff;transition:.2s}
+.reg-field input:focus,.reg-field select:focus{outline:none;border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.1)}
+.reg-field input::placeholder{color:#9ca3af}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.reg-btns{display:flex;gap:10px;margin-top:24px}
+.reg-btns button{flex:1;padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s}
+.reg-btns .reg-btn-p{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.reg-btns .reg-btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(22,163,74,.4)}
+.reg-btns .reg-btn-s{background:#f3f4f6;color:#6b7280}
+.reg-btn-s:hover{background:#e5e7eb}
+.reg-guest{text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb}
+.reg-guest button{background:none;border:none;color:#16a34a;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline}
+.reg-guest button:hover{color:#15803d}
+.reg-error{color:#dc2626;font-size:13px;font-weight:700;margin-top:-8px;margin-bottom:12px;display:none;text-align:right}
+
+/* User dropdown menu */
+.user-menu{position:absolute;top:55px;left:10px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.15);padding:8px;min-width:180px;display:none;z-index:1001;border:1px solid #e5e7eb}
+.user-menu.on{display:block}
+.user-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;color:#374151;cursor:pointer;transition:.2s}
+.user-menu-item:hover{background:#f0fdf4;color:#065f46}
+.user-menu-hr{margin:6px 0;border:none;border-top:1px solid #e5e7eb}
+
+/* Progress section for registered users */
+.prog-sec{background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:40px 20px;margin:40px 0;border-radius:20px;border:2px solid #bbf7d0}
+.prog-sec h2{text-align:center;color:#065f46;font-size:24px;font-weight:800;margin-bottom:24px}
+.prog-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.prog-card{background:#fff;padding:24px;border-radius:16px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.prog-card .n{font-size:36px;font-weight:800;color:#16a34a}
+.prog-card .l{font-size:14px;color:#6b7280;margin-top:4px;font-weight:600}
+
+/* Mobile */
+@media(max-width:768px){
+.nav-links{display:none;position:absolute;top:65px;left:0;right:0;background:#fff;padding:16px;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.nav-links.on{display:flex}
+.mob-btn{display:block}
+.hero{padding-top:80px}
+.stats-in{grid-template-columns:repeat(2,1fr)}
+.reg-grid{grid-template-columns:1fr}
+.user-menu{left:auto;right:10px}
+}
+</style>
+
 <base target="_blank">
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     NAVIGATION
-     ═══════════════════════════════════════════ -->
 <nav class="nav" id="nav">
   <div class="nav-in">
-    <a href="index.html" class="logo">
-      <div class="logo-icon">📖</div>
-      <span>أكاديمية الفقه والتفقه</span>
-    </a>
+    <a href="index.html" class="logo"><span>📖</span>أكاديمية الفقه والتفقه</a>
     <div class="nav-links" id="navLinks">
-      <a href="#feat" class="nav-link">المميزات</a>
-      <a href="#vis" class="nav-link">عن المنصة</a>
-      <a href="training.html" class="nav-btn">🎯 ابدأ التدريب</a>
+      <a href="#feat">المميزات</a>
+      <a href="#vis">عن المنصة</a>
+      <a href="training.html" class="btn">🎯 ابدأ التدريب</a>
+      <!-- User badge will be inserted here by JS -->
       <span id="navUserArea"></span>
     </div>
-    <button class="mob-btn" onclick="document.getElementById('navLinks').classList.toggle('on')" aria-label="فتح القائمة">☰</button>
+    <button class="mob-btn" onclick="document.getElementById('navLinks').classList.toggle('on')">☰</button>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════
-     HERO SECTION
-     ═══════════════════════════════════════════ -->
 <section class="hero">
   <div class="hero-in">
-    <div class="hero-badge">
-      <span>🌟</span>
-      <span>منصة تعليمية شرعية غير ربحية</span>
-    </div>
+    <div class="hero-badge"><span>🌟</span><span>منصة تعليمية شرعية غير ربحية</span></div>
     <h1>تعلم <span>الفقه</span> والتفقه<br>في الإسلام</h1>
     <p>منصة علمية شرعية تهدف إلى تعليم المسلمين، المراجعة المستمرة، والتعلم بالممارسة من خلال اختبارات تفاعلية مع الشرح</p>
     <div class="hero-btns">
@@ -60,33 +177,16 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     STATS SECTION
-     ═══════════════════════════════════════════ -->
 <section class="stats">
   <div class="stats-in">
-    <div class="stat-item">
-      <h3 id="stQ">0</h3>
-      <p>سؤال شرعي</p>
-    </div>
-    <div class="stat-item">
-      <h3 id="stC">0</h3>
-      <p>تصنيف علمي</p>
-    </div>
-    <div class="stat-item">
-      <h3 id="stE">0</h3>
-      <p>اختبار منجز</p>
-    </div>
-    <div class="stat-item">
-      <h3 id="stR">0</h3>
-      <p>شهادة مصدقة</p>
-    </div>
+    <div><h3 id="stQ">0</h3><p>سؤال شرعي</p></div>
+    <div><h3 id="stC">0</h3><p>تصنيف علمي</p></div>
+    <div><h3 id="stE">0</h3><p>اختبار منجز</p></div>
+    <div><h3 id="stR">0</h3><p>شهادة مصدقة</p></div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     PROGRESS SECTION (Registered Users Only)
-     ═══════════════════════════════════════════ -->
+<!-- Progress Section (shown only for registered trainees) -->
 <section class="prog-sec" id="progSec" style="display:none">
   <h2>📊 تقدمك التعليمي</h2>
   <div class="prog-grid">
@@ -109,45 +209,42 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     FEATURES SECTION
-     ═══════════════════════════════════════════ -->
 <section class="sec" id="feat">
   <h2>🚀 مميزات المنصة</h2>
   <p>كل ما تحتاجه للمراجعة والتعلم الشرعي في مكان واحد</p>
   <div class="feat">
     <div class="card">
-      <div class="ic">🎯</div>
+      <div class="ic" style="background:#e8f5e9">🎯</div>
       <h3>التدريب التفاعلي</h3>
       <p>اختبارات تفاعلية في الفقه والعقيدة والحديث والتفسير مع إظهار الإجابة الصحيحة</p>
       <a href="training.html">ابدأ الآن ←</a>
     </div>
     <div class="card">
-      <div class="ic">🎓</div>
+      <div class="ic" style="background:#e3f2fd">🎓</div>
       <h3>الشهادات الذكية</h3>
-      <p>احصل على شهادة PDF مصدقة عند حل 20+ سؤال بنسبة 60%+ مع QR للتحقق</p>
+      <p>احصل على شهادة PDF مصدقة عند حل 20+ سؤال بنسبة 70%+ مع QR للتحقق</p>
       <a href="training.html">احصل على شهادتك ←</a>
     </div>
     <div class="card">
-      <div class="ic">🎧</div>
+      <div class="ic" style="background:#fff3e0">🎧</div>
       <h3>المكتبة الصوتية</h3>
       <p>استمع للدروس الشرعية والمحاضرات الصوتية مباشرة من المتصفح</p>
-      <span style="color:var(--color-text-muted);font-size:var(--font-size-sm)">قريباً ←</span>
+      <span style="color:#999;font-size:14px">قريباً ←</span>
     </div>
     <div class="card">
-      <div class="ic">🎬</div>
+      <div class="ic" style="background:#f3e5f5">🎬</div>
       <h3>الفيديوهات التعليمية</h3>
       <p>شاهد دروساً مرئية في العلوم الشرعية من مصادر موثوقة</p>
-      <span style="color:var(--color-text-muted);font-size:var(--font-size-sm)">قريباً ←</span>
+      <span style="color:#999;font-size:14px">قريباً ←</span>
     </div>
     <div class="card">
-      <div class="ic">📊</div>
+      <div class="ic" style="background:#ffebee">📊</div>
       <h3>تحليل الأداء</h3>
       <p>تعرف على نقاط قوتك وضعفك مع تقرير مفصل لكل اختبار</p>
       <a href="training.html">اختبر نفسك ←</a>
     </div>
     <div class="card">
-      <div class="ic">🔄</div>
+      <div class="ic" style="background:#e0f2f1">🔄</div>
       <h3>مراجعة مستمرة</h3>
       <p>نظام ذكي يساعدك على عدم نسيان المعلومات الشرعية بالتكرار المناسب</p>
       <a href="training.html">راجع الآن ←</a>
@@ -155,21 +252,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     VISION SECTION
-     ═══════════════════════════════════════════ -->
 <section class="vis" id="vis">
   <div class="vis-in">
     <div class="vis-box">
       <h3>📜 رسالتنا</h3>
       <p>منصة علمية شرعية إسلامية غير ربحية تهدف إلى:</p>
-      <ul>
-        <li>تعليم المسلمين علوم الشريعة</li>
-        <li>المراجعة المستمرة للعلوم الشرعية</li>
-        <li>عدم نسيان المعلومات الشرعية</li>
-        <li>التعلم بالممارسة والتدريب</li>
-        <li>إظهار الإجابة الصحيحة مع الشرح</li>
-      </ul>
+      <ul><li>تعليم المسلمين علوم الشريعة</li><li>المراجعة المستمرة للعلوم الشرعية</li><li>عدم نسيان المعلومات الشرعية</li><li>التعلم بالممارسة والتدريب</li><li>إظهار الإجابة الصحيحة مع الشرح</li></ul>
     </div>
     <div class="vis-box">
       <h3>👁️ رؤيتنا</h3>
@@ -177,34 +265,22 @@
     </div>
     <div class="vis-box">
       <h3>🎯 أهدافنا</h3>
-      <ul>
-        <li>نشر العلوم الشرعية بطريقة عصرية</li>
-        <li>تسهيل المراجعة والحفظ للطلاب</li>
-        <li>ربط النظر بالتطبيق من خلال الاختبارات</li>
-        <li>تشجيع التنافس العلمي الشريف</li>
-        <li>بناء مجتمع تعليمي تفاعلي</li>
-      </ul>
+      <ul><li>نشر العلوم الشرعية بطريقة عصرية</li><li>تسهيل المراجعة والحفظ للطلاب</li><li>ربط النظر بالتطبيق من خلال الاختبارات</li><li>تشجيع التنافس العلمي الشريف</li><li>بناء مجتمع تعليمي تفاعلي</li></ul>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     SHARE SECTION
-     ═══════════════════════════════════════════ -->
 <section class="share">
   <h3>📢 شارك المنصة مع الآخرين</h3>
   <div class="share-btns">
-    <a href="#" class="share-btn share-wa" onclick="sh('wa');return false" title="WhatsApp" aria-label="مشاركة على واتساب">📱</a>
-    <a href="#" class="share-btn share-tg" onclick="sh('tg');return false" title="Telegram" aria-label="مشاركة على تلغرام">✈️</a>
-    <a href="#" class="share-btn share-fb" onclick="sh('fb');return false" title="Facebook" aria-label="مشاركة على فيسبوك">📘</a>
-    <a href="#" class="share-btn share-x" onclick="sh('x');return false" title="X" aria-label="مشاركة على X">𝕏</a>
-    <button class="share-btn share-link" onclick="cpLink()" title="نسخ الرابط" aria-label="نسخ رابط المنصة">🔗</button>
+    <a href="#" class="s-wa" onclick="sh('wa');return false" title="WhatsApp">📱</a>
+    <a href="#" class="s-tg" onclick="sh('tg');return false" title="Telegram">✈️</a>
+    <a href="#" class="s-fb" onclick="sh('fb');return false" title="Facebook">📘</a>
+    <a href="#" class="s-x" onclick="sh('x');return false" title="X">𝕏</a>
+    <button class="s-link" onclick="cpLink()" title="نسخ الرابط">🔗</button>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════ -->
 <footer class="foot">
   <div class="foot-in">
     <div>
@@ -214,6 +290,7 @@
     <div>
       <h4>🔗 روابط سريعة</h4>
       <a href="training.html">🎯 التدريب</a>
+      <!-- Admin links hidden from normal users -->
       <a href="admin.html" class="admin-link" style="display:none">⚙️ لوحة الإدارة</a>
       <a href="add-question.html" class="admin-link" style="display:none">📝 إدارة الأسئلة</a>
     </div>
@@ -230,46 +307,42 @@
   <div class="foot-bot">© 2025 أكاديمية الفقه والتفقه الإسلامي</div>
 </footer>
 
-<!-- ═══════════════════════════════════════════
-     NAME MODAL (Quick Start)
-     ═══════════════════════════════════════════ -->
-<div class="modal" id="mod" onclick="if(event.target===this)closeMod()">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeMod()" aria-label="إغلاق">✕</button>
-    <h3 class="modal-title">🎯 ابدأ التدريب</h3>
-    <p class="modal-subtitle">اكتب اسمك فقط للبدء — لا يحتاج تسجيل</p>
-    <input type="text" id="nm" class="form-input" placeholder="اسم المتدرب" maxlength="50" aria-label="اسم المتدرب">
-    <a href="training.html" class="btn btn-p btn-block" style="margin-top:var(--space-md)" onclick="return svNm()">🚀 ابدأ الاختبار</a>
+<!-- Name Modal (for quick start) -->
+<div class="mod" id="mod" onclick="if(event.target===this)closeMod()">
+  <div class="mod-box">
+    <button class="mod-close" onclick="closeMod()">✕</button>
+    <h3>🎯 ابدأ التدريب</h3>
+    <p>اكتب اسمك فقط للبدء — لا يحتاج تسجيل</p>
+    <input type="text" id="nm" placeholder="اسم المتدرب" maxlength="50">
+    <a href="training.html" class="btn btn-p" style="width:100%;justify-content:center" onclick="return svNm()">🚀 ابدأ الاختبار</a>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     REGISTRATION MODAL
-     ═══════════════════════════════════════════ -->
-<div class="modal" id="regMod" onclick="if(event.target===this)closeRegMod()">
-  <div class="modal-box modal-box-lg">
-    <button class="modal-close" onclick="closeRegMod()" aria-label="إغلاق">✕</button>
-    <h2 class="modal-title" style="font-size:var(--font-size-2xl)">👤 تسجيل كمتدرب</h2>
-    <p class="modal-subtitle">سجّل بياناتك لحفظ تقدمك وشهاداتك</p>
+<!-- Registration Modal -->
+<div class="reg-mod" id="regMod" onclick="if(event.target===this)closeRegMod()">
+  <div class="reg-box">
+    <button class="reg-close" onclick="closeRegMod()">✕</button>
+    <h2>👤 تسجيل كمتدرب</h2>
+    <p class="sub">سجّل بياناتك لحفظ تقدمك وشهاداتك</p>
 
-    <div class="form-group" style="margin-bottom:var(--space-md);text-align:right">
-      <label class="form-label">الاسم الكريم <span class="req">*</span></label>
-      <input type="text" id="regName" class="form-input" placeholder="محمد أحمد" maxlength="50" aria-label="الاسم الكريم">
+    <div class="reg-field">
+      <label>الاسم الكريم <span class="req">*</span></label>
+      <input type="text" id="regName" placeholder="محمد أحمد" maxlength="50">
     </div>
 
-    <div class="form-group" style="margin-bottom:var(--space-md);text-align:right">
-      <label class="form-label">البريد الإلكتروني <span class="req">*</span></label>
-      <input type="email" id="regEmail" class="form-input" placeholder="example@email.com" maxlength="100" aria-label="البريد الإلكتروني">
+    <div class="reg-field">
+      <label>البريد الإلكتروني <span class="req">*</span></label>
+      <input type="email" id="regEmail" placeholder="example@email.com" maxlength="100">
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:var(--space-md)">
-      <div class="form-group" style="text-align:right">
-        <label class="form-label">العمر</label>
-        <input type="number" id="regAge" class="form-input" placeholder="25" min="5" max="120" aria-label="العمر">
+    <div class="reg-grid">
+      <div class="reg-field">
+        <label>العمر</label>
+        <input type="number" id="regAge" placeholder="25" min="5" max="120">
       </div>
-      <div class="form-group" style="text-align:right">
-        <label class="form-label">الجنس</label>
-        <select id="regGender" class="form-select" aria-label="الجنس">
+      <div class="reg-field">
+        <label>الجنس</label>
+        <select id="regGender">
           <option value="">اختر...</option>
           <option value="ذكر">ذكر</option>
           <option value="أنثى">أنثى</option>
@@ -277,9 +350,9 @@
       </div>
     </div>
 
-    <div class="form-group" style="margin-bottom:var(--space-md);text-align:right">
-      <label class="form-label">أعلى شهادة دراسية</label>
-      <select id="regEdu" class="form-select" aria-label="أعلى شهادة دراسية">
+    <div class="reg-field">
+      <label>أعلى شهادة دراسية</label>
+      <select id="regEdu">
         <option value="">اختر...</option>
         <option value="ابتدائي">ابتدائي</option>
         <option value="متوسط">متوسط</option>
@@ -290,36 +363,24 @@
       </select>
     </div>
 
-    <div class="form-error" id="regError">⚠️ يرجى ملء الاسم والبريد الإلكتروني بشكل صحيح</div>
+    <div class="reg-error" id="regError">⚠️ يرجى ملء الاسم والبريد الإلكتروني بشكل صحيح</div>
 
-    <div style="display:flex;gap:10px;margin-top:var(--space-lg)">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeRegMod()">إلغاء</button>
-      <button class="btn btn-p" style="flex:1" onclick="doRegister()">💾 تسجيل</button>
+    <div class="reg-btns">
+      <button class="reg-btn-s" onclick="closeRegMod()">إلغاء</button>
+      <button class="reg-btn-p" onclick="doRegister()">💾 تسجيل</button>
     </div>
 
-    <div style="text-align:center;margin-top:var(--space-lg);padding-top:var(--space-lg);border-top:1px solid var(--color-border)">
-      <button style="background:none;border:none;color:var(--color-navy);font-size:var(--font-size-sm);font-weight:700;cursor:pointer;text-decoration:underline;text-decoration-color:var(--color-gold);text-underline-offset:3px;transition:all var(--transition-fast)" onclick="enterAsGuest()">👤 الدخول كزائر بدون تسجيل</button>
+    <div class="reg-guest">
+      <button onclick="enterAsGuest()">👤 الدخول كزائر بدون تسجيل</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     ADMIN SECRET SHORTCUT
-     ═══════════════════════════════════════════ -->
-<div class="admin-secret" id="adminSecret" title="اضغط 5 مرات متتالية أو Ctrl+Shift+A" role="button" tabindex="0" aria-label="اختصار الإدارة"></div>
-<div class="admin-link-btn" id="adminLinks" role="menu" aria-label="روابط الإدارة">
-  <a href="admin.html" role="menuitem">⚙️ لوحة التحكم</a>
-  <a href="add-question.html" role="menuitem">📝 إدارة الأسئلة</a>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT (100% Preserved from Original)
-     ═══════════════════════════════════════════ -->
 <script>
 const SITE='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/';
 const JSON_URL='https://ieashehata1965-netizen.github.io/fiqh-tafaqh/fiqh-questions.json';
 
-// ====== USER SYSTEM (100% preserved) ======
+// ====== USER SYSTEM ======
 let currentUser = null;
 
 function initUser(){
@@ -336,6 +397,7 @@ function updateNavUser(){
   if(!area) return;
 
   if(currentUser && currentUser.name){
+    // Show user badge with dropdown
     area.innerHTML = `
       <div style="position:relative;display:inline-block">
         <div class="user-badge" onclick="toggleUserMenu()">
@@ -347,12 +409,13 @@ function updateNavUser(){
           <div class="user-menu-item" onclick="openRegMod()">✏️ تعديل بياناتي</div>
           <div class="user-menu-item" onclick="goToTraining()">🎯 ابدأ التدريب</div>
           <div class="user-menu-hr"></div>
-          <div class="user-menu-item" onclick="logoutUser()" style="color:var(--color-danger)">🚪 تسجيل الخروج</div>
+          <div class="user-menu-item" onclick="logoutUser()" style="color:#dc2626">🚪 تسجيل الخروج</div>
         </div>
       </div>
     `;
   } else {
-    area.innerHTML = `<a href="#" class="nav-btn" style="padding:8px 20px!important;font-size:13px" onclick="openRegMod();return false">👤 تسجيل الدخول</a>`;
+    // Show login button
+    area.innerHTML = `<a href="#" class="btn" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff!important" onclick="openRegMod();return false">👤 تسجيل الدخول</a>`;
   }
 }
 
@@ -361,6 +424,7 @@ function toggleUserMenu(){
   if(menu) menu.classList.toggle('on');
 }
 
+// Close user menu when clicking outside
 document.addEventListener('click', function(e){
   const menu = document.getElementById('userMenu');
   const badge = document.querySelector('.user-badge');
@@ -372,6 +436,8 @@ document.addEventListener('click', function(e){
 function openRegMod(){
   document.getElementById('regMod').classList.add('on');
   document.getElementById('regError').style.display = 'none';
+
+  // Pre-fill if user exists
   if(currentUser){
     document.getElementById('regName').value = currentUser.name || '';
     document.getElementById('regEmail').value = currentUser.email || '';
@@ -379,10 +445,13 @@ function openRegMod(){
     document.getElementById('regGender').value = currentUser.gender || '';
     document.getElementById('regEdu').value = currentUser.education || '';
   }
+
   setTimeout(()=>document.getElementById('regName').focus(),100);
 }
 
-function closeRegMod(){ document.getElementById('regMod').classList.remove('on'); }
+function closeRegMod(){
+  document.getElementById('regMod').classList.remove('on');
+}
 
 function doRegister(){
   const name = document.getElementById('regName').value.trim();
@@ -392,29 +461,47 @@ function doRegister(){
   const education = document.getElementById('regEdu').value;
   const errorEl = document.getElementById('regError');
 
+  // Validation
   if(!name || name.length < 2){
     errorEl.textContent = '⚠️ الاسم مطلوب (حرفين على الأقل)';
     errorEl.style.display = 'block';
     return;
   }
+
   if(!email || !email.includes('@') || !email.includes('.')){
     errorEl.textContent = '⚠️ أدخل بريد إلكتروني صحيح';
     errorEl.style.display = 'block';
     return;
   }
 
-  currentUser = { name, email, age: age || null, gender: gender || null, education: education || null, registeredAt: new Date().toISOString() };
+  // Save user
+  currentUser = {
+    name,
+    email,
+    age: age || null,
+    gender: gender || null,
+    education: education || null,
+    registeredAt: new Date().toISOString()
+  };
+
   localStorage.setItem('fiqh_user', JSON.stringify(currentUser));
-  localStorage.setItem('trainee_name', name);
+  localStorage.setItem('trainee_name', name); // for backward compatibility
 
   errorEl.style.display = 'none';
   closeRegMod();
   updateNavUser();
   updateProgress();
-  setTimeout(()=>{ alert('✅ مرحباً ' + name + '! تم تسجيلك بنجاح. تقدمك سيُحفظ تلقائياً.'); }, 300);
+
+  // Show welcome toast (simple alert for now)
+  setTimeout(()=>{
+    alert('✅ مرحباً ' + name + '! تم تسجيلك بنجاح. تقدمك سيُحفظ تلقائياً.');
+  }, 300);
 }
 
-function enterAsGuest(){ closeRegMod(); }
+function enterAsGuest(){
+  closeRegMod();
+  // Just close modal, user stays as guest
+}
 
 function logoutUser(){
   if(!confirm('هل تريد تسجيل الخروج؟ سيتم حفظ تقدمك.')) return;
@@ -426,32 +513,41 @@ function logoutUser(){
   document.getElementById('userMenu')?.classList.remove('on');
 }
 
-function goToTraining(){ window.location.href = 'training.html'; }
+function goToTraining(){
+  window.location.href = 'training.html';
+}
 
+// Update progress section
 function updateProgress(){
   const sec = document.getElementById('progSec');
   if(!sec) return;
-  if(!currentUser){ sec.style.display = 'none'; return; }
+
+  if(!currentUser){
+    sec.style.display = 'none';
+    return;
+  }
+
+  // Get progress from localStorage
   const progress = JSON.parse(localStorage.getItem('fiqh_progress_' + currentUser.email) || '{}');
   const totalAnswered = progress.totalAnswered || 0;
   const totalCorrect = progress.totalCorrect || 0;
   const totalCerts = progress.totalCerts || 0;
   const rate = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+
   document.getElementById('progAns').textContent = totalAnswered;
   document.getElementById('progCorrect').textContent = totalCorrect;
   document.getElementById('progRate').textContent = rate + '%';
   document.getElementById('progCerts').textContent = totalCerts;
+
   sec.style.display = 'block';
 }
 
-// ====== NAVBAR SCROLL EFFECT ======
-window.onscroll = () => {
-  const nav = document.getElementById('nav');
-  if(window.scrollY > 50) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-};
+// ====== EXISTING CODE (preserved) ======
 
-// ====== STATS (preserved) ======
+// Navbar scroll
+window.onscroll=()=>document.getElementById('nav').style.boxShadow=window.scrollY>50?'0 4px 20px rgba(0,0,0,.1)':'none';
+
+// Load stats
 fetch(JSON_URL+'?v='+Date.now()).then(r=>r.json()).then(d=>{
   if(Array.isArray(d)){
     anim('stQ',d.length);
@@ -468,13 +564,13 @@ function anim(id,tgt){
   let iv=setInterval(()=>{c+=step;if(c>=tgt){c=tgt;clearInterval(iv)}el.textContent=c.toLocaleString('ar-SA')},40);
 }
 
-// ====== MODAL (preserved) ======
+// Modal
 function openMod(){document.getElementById('mod').classList.add('on');setTimeout(()=>document.getElementById('nm').focus(),100)}
 function closeMod(){document.getElementById('mod').classList.remove('on')}
 function svNm(){let n=document.getElementById('nm').value.trim();if(!n){alert('⚠️ أدخل اسمك');return false}localStorage.setItem('trainee_name',n);return true}
-document.getElementById('nm').onkeypress=e=>{if(e.key==='Enter'&&svNm())document.querySelector('.modal-box .btn').click()};
+document.getElementById('nm').onkeypress=e=>{if(e.key==='Enter'&&svNm())document.querySelector('.mod-box .btn').click()};
 
-// ====== SHARE (preserved) ======
+// Share
 function sh(p){
   let t='أكاديمية الفقه والتفقه الإسلامي - منصة تعليمية شرعية غير ربحية';
   let u=encodeURIComponent(SITE),txt=encodeURIComponent(t);
@@ -483,36 +579,11 @@ function sh(p){
 }
 function cpLink(){navigator.clipboard.writeText(SITE).then(()=>alert('✅ تم النسخ')).catch(()=>{let i=document.createElement('input');i.value=SITE;document.body.appendChild(i);i.select();document.execCommand('copy');document.body.removeChild(i);alert('✅ تم النسخ')})}
 
-// ====== INTERSECTION OBSERVER (preserved) ======
+// Intersection Observer for animations
 let obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='translateY(0)'}}),{threshold:.1});
 document.querySelectorAll('.card,.vis-box').forEach(el=>{el.style.opacity=0;el.style.transition='opacity .6s,transform .6s';el.style.transform='translateY(20px)';obs.observe(el)});
 
-// ====== ADMIN SECRET SHORTCUT ======
-let adminClicks = 0;
-let adminTimer = null;
-function toggleAdminLinks(){
-  document.getElementById('adminLinks').classList.toggle('on');
-  document.getElementById('adminSecret').classList.toggle('on');
-}
-
-document.getElementById('adminSecret').onclick = function(){
-  adminClicks++;
-  if(adminClicks >= 5){
-    toggleAdminLinks();
-    adminClicks = 0;
-  }
-  clearTimeout(adminTimer);
-  adminTimer = setTimeout(()=>adminClicks=0, 2000);
-};
-
-document.addEventListener('keydown', function(e){
-  if(e.ctrlKey && e.shiftKey && e.key === 'A'){
-    e.preventDefault();
-    toggleAdminLinks();
-  }
-});
-
-// Init
+// Init user system on load
 initUser();
 </script>
 
