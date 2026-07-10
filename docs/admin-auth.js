@@ -1,19 +1,21 @@
-// ===============================
+// ======================================
 // نظام الدخول السري للإدارة
-// الإصدار الأول
-// ===============================
+// الضغط 7 مرات على شعار المنصة
+// ======================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const logo = document.getElementById("secretAdminTrigger");
-    const overlay = document.getElementById("adminLoginOverlay");
+    const trigger = document.getElementById("secretAdminTrigger");
 
-    if (!logo || !overlay) return;
+    if (!trigger) {
+        console.error("لم يتم العثور على العنصر secretAdminTrigger");
+        return;
+    }
 
     let clickCount = 0;
     let firstClickTime = 0;
 
-    logo.addEventListener("click", function (e) {
+    trigger.addEventListener("click", function (e) {
 
         const now = Date.now();
 
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             clickCount = 0;
             firstClickTime = 0;
 
-            overlay.style.display = "flex";
+            window.location.href = "admin.html";
         }
 
     });
