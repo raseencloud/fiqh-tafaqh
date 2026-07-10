@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const trigger = document.getElementById("secretAdminTrigger");
 
-    trigger.style.border = "4px solid red";
-
+   
     console.log(trigger);
 
     if (!trigger) {
