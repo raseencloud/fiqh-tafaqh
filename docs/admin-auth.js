@@ -7,7 +7,11 @@ console.log("admin-auth.js loaded");
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    console.log("DOM Loaded");
+
     const trigger = document.getElementById("secretAdminTrigger");
+
+    console.log(trigger);
 
     if (!trigger) {
         console.error("لم يتم العثور على العنصر secretAdminTrigger");
@@ -19,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     trigger.addEventListener("click", function (e) {
 
+        console.log("Click");
+
         const now = Date.now();
 
         if (firstClickTime === 0 || (now - firstClickTime) > 5000) {
@@ -28,7 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
             clickCount++;
         }
 
+        console.log("Count =", clickCount);
+
         if (clickCount >= 7) {
+
+            console.log("Opening admin");
 
             e.preventDefault();
 
