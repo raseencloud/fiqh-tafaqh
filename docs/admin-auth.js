@@ -4,11 +4,12 @@
 // ======================================
 
 console.log("admin-auth.js loaded");
-const trigger = document.getElementById("secretAdminTrigger");
 
 document.addEventListener("DOMContentLoaded", function () {
 
     console.log("DOM Loaded");
+
+    const trigger = document.getElementById("secretAdminTrigger");
 
     trigger.style.border = "4px solid red";
 
@@ -18,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("لم يتم العثور على العنصر secretAdminTrigger");
         return;
     }
-
     let clickCount = 0;
     let firstClickTime = 0;
 
