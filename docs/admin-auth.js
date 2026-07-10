@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("DOM Loaded");
 
-    const trigger = document.getElementById("secretAdminTrigger");
+    trigger.style.border = "4px solid red";
 
     console.log(trigger);
 
