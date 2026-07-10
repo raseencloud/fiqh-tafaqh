@@ -22,8 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let firstClickTime = 0;
 
     trigger.onclick = function (e) {
-        
-        console.log("Click");
+
+    alert("تم الضغط");
+
+    console.log("Click");
 
         const now = Date.now();
 
