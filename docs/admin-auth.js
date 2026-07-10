@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let clickCount = 0;
     let firstClickTime = 0;
 
-    trigger.addEventListener("click", function (e) {
-
+    trigger.onclick = function (e) {
+        
         console.log("Click");
 
         const now = Date.now();
