@@ -8,47 +8,58 @@ console.log("admin-auth.js loaded");
 document.addEventListener("DOMContentLoaded", function () {
 
     console.log("DOM Loaded");
-console.log("admin-auth.js executed", Date.now());
+
     const trigger = document.getElementById("secretAdminTrigger");
 
-   
     console.log(trigger);
 
     if (!trigger) {
         console.error("لم يتم العثور على العنصر secretAdminTrigger");
         return;
     }
-    let clickCount = 0;
-    let firstClickTime = 0;
-console.log("clickCount initialized");
-   trigger.addEventListener("click", function (e) {
-    console.log("Click");
 
-    const now = Date.now();
+    // قراءة القيم المحفوظة
+    let clickCount = Number(sessionStorage.getItem("adminClickCount")) || 0;
+    let firstClickTime = Number(sessionStorage.getItem("adminFirstClick")) || 0;
 
-    if (firstClickTime === 0 || (now - firstClickTime) > 5000) {
-        clickCount = 1;
-        firstClickTime = now;
-    } else {
-        clickCount++;
-    }
+    trigger.addEventListener("click", function (e) {
 
-    alert("Count = " + clickCount);
-
-    console.log("Count =", clickCount);
-
-    if (clickCount >= 7) {
-
-        console.log("Opening admin");
-
+        // منع انتقال الرابط
         e.preventDefault();
 
-        clickCount = 0;
-        firstClickTime = 0;
+        console.log("Click");
 
-        window.location.href = "admin.html";
-    }
+        const now = Date.now();
 
-};   // ← نهاية trigger.onclick
+        // إعادة العد إذا مر أكثر من 5 ثوانٍ
+        if (firstClickTime === 0 || (now - firstClickTime) > 5000) {
+            clickCount = 1;
+            firstClickTime = now;
+        } else {
+            clickCount++;
+        }
 
-});   // ← نهاية document.addEventListener
+        // حفظ القيم
+        sessionStorage.setItem("adminClickCount", clickCount);
+        sessionStorage.setItem("adminFirstClick", firstClickTime);
+
+        console.log("Count =", clickCount);
+
+        // للتجربة فقط
+        alert("Count = " + clickCount);
+
+        // فتح الإدارة بعد 7 ضغطات
+        if (clickCount >= 7) {
+
+            console.log("Opening admin");
+
+            // تصفير العد
+            sessionStorage.removeItem("adminClickCount");
+            sessionStorage.removeItem("adminFirstClick");
+
+            window.location.href = "admin.html";
+        }
+
+    });
+
+});
