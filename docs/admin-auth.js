@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("Count =", clickCount);
 
-        // للتجربة فقط
-        alert("Count = " + clickCount);
-
+        // للتطوير فقط
+// console.log("Count =", clickCount);
+        
         // فتح الإدارة بعد 7 ضغطات
         if (clickCount >= 7) {
 
