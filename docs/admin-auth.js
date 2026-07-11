@@ -8,7 +8,7 @@ console.log("admin-auth.js loaded");
 document.addEventListener("DOMContentLoaded", function () {
 
     console.log("DOM Loaded");
-
+console.log("admin-auth.js executed", Date.now());
     const trigger = document.getElementById("secretAdminTrigger");
 
    
