@@ -1,3 +1,10 @@
+التعديل المطلوب حاليا Version 1.0 Stable
+- Hidden admin access secured
+- Admin panel working
+- Question management working
+- Production release  في 11 بوليو 2026
+
+
 # Fiqh Tafaquh Platform Roadmap
 
 ## Version 1.0 - Current
