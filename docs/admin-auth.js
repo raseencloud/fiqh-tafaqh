@@ -21,33 +21,33 @@ document.addEventListener("DOMContentLoaded", function () {
     let clickCount = 0;
     let firstClickTime = 0;
 
-    trigger.onclick = function (e) {
+   trigger.onclick = function (e) {
 
-      console.log("Click");
+    console.log("Click");
 
-        const now = Date.now();
+    const now = Date.now();
 
-        if (firstClickTime === 0 || (now - firstClickTime) > 5000) {
-            clickCount = 1;
-            firstClickTime = now;
-        } else {
-            clickCount++;
-        }
+    if (firstClickTime === 0 || (now - firstClickTime) > 5000) {
+        clickCount = 1;
+        firstClickTime = now;
+    } else {
+        clickCount++;
+    }
 
-        console.log("Count =", clickCount);
+    alert("Count = " + clickCount);
 
-        if (clickCount >= 7) {
+    console.log("Count =", clickCount);
 
-            console.log("Opening admin");
+    if (clickCount >= 7) {
 
-            e.preventDefault();
+        console.log("Opening admin");
 
-            clickCount = 0;
-            firstClickTime = 0;
+        e.preventDefault();
 
-            window.location.href = "admin.html";
-        }
+        clickCount = 0;
+        firstClickTime = 0;
 
-       };
+        window.location.href = "admin.html";
+    }
 
-});
+};
