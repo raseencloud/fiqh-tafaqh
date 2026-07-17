@@ -289,6 +289,7 @@
             <button class="filter-btn" data-filter="الحديث" onclick="setFilter('الحديث')">الحديث</button>
             <button class="filter-btn" data-filter="التفسير" onclick="setFilter('التفسير')">التفسير</button>
             <button class="filter-btn" data-filter="الآداب" onclick="setFilter('الآداب')">الآداب</button>
+            <button class="filter-btn" data-filter="السيرة" onclick="setFilter('السيرة')">السيرة</button>
         </div>
     </div>
 
@@ -481,6 +482,13 @@
                 🎧 استمع للمحاضرة
             </a>
         </div>
+        <!-- ═══════════════════════════════════════ -->
+        <!-- المحاضرة 1: السيرة النبوية -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="lecture-card" data-search="..." data-category="السيرة">
+    ...
+    <span class="tag">السيرة</span>
+</div>
 
     </div>
 
@@ -504,6 +512,23 @@
             <li>📱 <a href="https://play.google.com/store/apps/details?id=com.greentech.quran" target="_blank" rel="noopener noreferrer">MP3 Quran</a> — تحميل التلاوات للاستماع بدون نت</li>
             <li>📱 <a href="https://play.google.com/store/apps/details?id=com.ayah" target="_blank" rel="noopener noreferrer">Ayah</a> — تطبيق خفيف للقرآن الكريم</li>
         </ul>
+        <!-- ═══════════════════════════════════════ -->
+<!-- المحاضرة الجديدة: [اسم الكتاب] -->
+<!-- ═══════════════════════════════════════ -->
+<div class="lecture-card" 
+     data-search="كلمات البحث المفتاحية هنا" 
+     data-category="التصنيف">
+    
+    <h4>📖 عنوان المحاضرة</h4>
+    <p>وصف مختصر للمحاضرة هنا.</p>
+    <div class="tags">
+        <span class="tag">التصنيف</span>  <!-- يجب أن يطابق data-category -->
+        <span class="tag">اسم المؤلف/الشيخ</span>
+    </div>
+    <a href="رابط-المحاضرة-هنا" target="_blank" rel="noopener noreferrer">
+        🎧 استمع للمحاضرة
+    </a>
+</div>
     </div>
 
     <hr>
