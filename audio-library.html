@@ -17,6 +17,121 @@
         }
         h1 { color: #1a5f2a; text-align: center; }
         h2 { color: #2e7d32; border-bottom: 2px solid #4caf50; padding-bottom: 5px; }
+
+        /* ═══════════════════════════════════════ */
+        /* شريط البحث */
+        /* ═══════════════════════════════════════ */
+        .search-box {
+            background: #fff;
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        .search-box h3 {
+            color: #2e7d32;
+            margin: 0 0 12px 0;
+            text-align: center;
+        }
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 14px 50px 14px 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .search-input-wrapper input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76,175,80,0.15);
+        }
+        .search-input-wrapper .search-icon {
+            position: absolute;
+            right: 15px;
+            font-size: 20px;
+            color: #888;
+        }
+        .search-input-wrapper .clear-btn {
+            position: absolute;
+            left: 12px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            display: none;
+        }
+        .search-input-wrapper .clear-btn:hover {
+            background: #ccc;
+        }
+        .search-stats {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            min-height: 22px;
+        }
+        .search-stats span {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* أزرار التصفية */
+        /* ═══════════════════════════════════════ */
+        .filter-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .filter-box h4 {
+            color: #2e7d32;
+            margin: 0 0 12px 0;
+            text-align: center;
+            font-size: 15px;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 8px 18px;
+            border: 2px solid #4caf50;
+            border-radius: 25px;
+            background: #fff;
+            color: #4caf50;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: inherit;
+        }
+        .filter-btn:hover {
+            background: #e8f5e9;
+            transform: translateY(-2px);
+        }
+        .filter-btn.active {
+            background: #4caf50;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(76,175,80,0.3);
+        }
+
         .warning-box {
             background: #fff3cd;
             border: 1px solid #ffc107;
@@ -73,6 +188,13 @@
             padding: 15px;
             margin: 12px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+        .lecture-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .lecture-card.hidden {
+            display: none;
         }
         .lecture-card h4 {
             color: #1a5f2a;
@@ -108,6 +230,16 @@
             font-weight: bold;
         }
         .lecture-card a:hover { background: #388e3c; }
+        .no-results {
+            text-align: center;
+            color: #888;
+            padding: 30px;
+            font-size: 16px;
+            display: none;
+        }
+        .no-results.show {
+            display: block;
+        }
         .footer-note {
             font-size: 13px;
             color: #666;
@@ -126,6 +258,39 @@
         والتلاوات، والدروس، والمتون العلمية، والمحاضرات الشرعية من مصادرها الأصلية.
     </p>
 
+    <!-- ═══════════════════════════════════════ -->
+    <!-- شريط البحث -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="search-box">
+        <h3>🔍 البحث في المحاضرات</h3>
+        <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="اكتب كلمة للبحث في عناوين المحاضرات والأوصاف والتصنيفات..."
+                autocomplete="off"
+            >
+            <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <div class="search-stats" id="searchStats"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- أزرار التصفية -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="filter-box">
+        <h4>🏷️ تصفية حسب التصنيف</h4>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">الكل</button>
+            <button class="filter-btn" data-filter="العقيدة" onclick="setFilter('العقيدة')">العقيدة</button>
+            <button class="filter-btn" data-filter="الفقه" onclick="setFilter('الفقه')">الفقه</button>
+            <button class="filter-btn" data-filter="الحديث" onclick="setFilter('الحديث')">الحديث</button>
+            <button class="filter-btn" data-filter="التفسير" onclick="setFilter('التفسير')">التفسير</button>
+            <button class="filter-btn" data-filter="الآداب" onclick="setFilter('الآداب')">الآداب</button>
+        </div>
+    </div>
+
     <div class="warning-box">
         ⚠️ <strong>تنبيه مهم:</strong> روابط البث المباشر أدناه تستهلك بيانات الإنترنت بشكل مستمر.
         <strong>يُنصح بالاستماع عبر شبكة واي فاي (Wi-Fi)</strong> لتجنب استنزاف باقة الجوال.
@@ -140,7 +305,6 @@
 
     <ul id="radioList">
 
-        <!-- 🇸🇦 السعودية -->
         <li>
             🇸🇦 <strong>المملكة العربية السعودية</strong>
             <div class="app-links">
@@ -156,7 +320,6 @@
             </div>
         </li>
 
-        <!-- 🇧🇭 البحرين -->
         <li>
             🇧🇭 <strong>مملكة البحرين</strong>
             <div class="app-links">
@@ -172,7 +335,6 @@
             </div>
         </li>
 
-        <!-- 🇪🇬 مصر -->
         <li>
             🇪🇬 <strong>جمهورية مصر العربية</strong>
             <div class="app-links">
@@ -193,66 +355,124 @@
     <hr>
 
     <!-- ═══════════════════════════════════════ -->
-    <!-- قسم الدروس والمحاضرات الصوتية (جديد) -->
+    <!-- قسم الدروس والمحاضرات الصوتية -->
     <!-- ═══════════════════════════════════════ -->
     <h2>🕌 الدروس والمحاضرات الصوتية</h2>
 
-    <!-- مثال 1 -->
-    <div class="lecture-card">
-        <h4>📖 عنوان المحاضرة الأولى</h4>
-        <p>وصف مختصر للمحاضرة — مثلاً: شرح كتاب التوحيد للشيخ محمد بن عبد الوهاب، الدرس الأول.</p>
-        <div class="tags">
-            <span class="tag">العقيدة</span>
-            <span class="tag">ابن عبد الوهاب</span>
+    <div id="lecturesContainer">
+
+        <!-- المحاضرة 1 -->
+        <div class="lecture-card" data-search="العقيدة الواسطية ابن طيمية شرح العقيدة" data-category="العقيدة">
+            <h4>📖 شرح العقيدة الواسطية</h4>
+            <p>شرح مفصل لكتاب العقيدة الواسطية للإمام ابن تيمية، يشرح أصول العقيدة الإسلامية بأسلوب واضح.</p>
+            <div class="tags">
+                <span class="tag">العقيدة</span>
+                <span class="tag">ابن تيمية</span>
+            </div>
+            <a href="https://example.com/lecture1" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
         </div>
-        <a href="https://example.com/lecture1" target="_blank" rel="noopener noreferrer">
-            🎧 استمع للمحاضرة
-        </a>
+
+        <!-- المحاضرة 2 -->
+        <div class="lecture-card" data-search="العقيدة الطحاوية شرح العقيدة" data-category="العقيدة">
+            <h4>📖 شرح متن العقيدة الطحاوية</h4>
+            <p>شرح متميز لمتن العقيدة الطحاوية، يوضح عقيدة أهل السنة والجماعة بأسلوب سهل ومبسط.</p>
+            <div class="tags">
+                <span class="tag">العقيدة</span>
+                <span class="tag">الطحاوية</span>
+            </div>
+            <a href="https://example.com/lecture2" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 3 -->
+        <div class="lecture-card" data-search="زاد المستقنع فقه الحنابلة" data-category="الفقه">
+            <h4>📖 شرح زاد المستقنع</h4>
+            <p>شرح كتاب زاد المستقنع في فقه الحنابلة، يغطي أحكام الطهارة والصلاة والزكاة والصيام.</p>
+            <div class="tags">
+                <span class="tag">الفقه</span>
+                <span class="tag">الحنابلة</span>
+            </div>
+            <a href="https://example.com/lecture3" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 4 -->
+        <div class="lecture-card" data-search="الأربعين النووية حديث الأحاديث" data-category="الحديث">
+            <h4>📖 شرح الأربعين النووية</h4>
+            <p>شرح الأحاديث الأربعين من الأحاديث النبوية الشريفة جمعها الإمام النووي رحمه الله.</p>
+            <div class="tags">
+                <span class="tag">الحديث</span>
+                <span class="tag">النووي</span>
+            </div>
+            <a href="https://example.com/lecture4" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 5 -->
+        <div class="lecture-card" data-search="تفسير ابن كثير القرآن" data-category="التفسير">
+            <h4>📖 تفسير ابن كثير</h4>
+            <p>تفسير القرآن العظيم لابن كثير، من أشهر كتب التفسير بالمأثور، يعتمد على الآيات والأحاديث.</p>
+            <div class="tags">
+                <span class="tag">التفسير</span>
+                <span class="tag">ابن كثير</span>
+            </div>
+            <a href="https://example.com/lecture5" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 6 -->
+        <div class="lecture-card" data-search="رياض الصالحين أحاديث آداب" data-category="الآداب">
+            <h4>📖 شرح رياض الصالحين</h4>
+            <p>شرح كتاب رياض الصالحين للإمام النووي، يجمع الأحاديث في الآداب والأخلاق والعبادات.</p>
+            <div class="tags">
+                <span class="tag">الآداب</span>
+                <span class="tag">النووي</span>
+            </div>
+            <a href="https://example.com/lecture6" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 7 -->
+        <div class="lecture-card" data-search="بulugh المرام حديث الأحكام" data-category="الحديث">
+            <h4>📖 شرح بلوغ المرام</h4>
+            <p>شرح كتاب بلوغ المرام من أدلة الأحكام للحافظ ابن حجر، يجمع الأحاديث المتعلقة بالأحكام الفقهية.</p>
+            <div class="tags">
+                <span class="tag">الحديث</span>
+                <span class="tag">ابن حجر</span>
+            </div>
+            <a href="https://example.com/lecture7" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
+        <!-- المحاضرة 8 -->
+        <div class="lecture-card" data-search="فقه السنة سيد سابق" data-category="الفقه">
+            <h4>📖 فقه السنة</h4>
+            <p>شرح كتاب فقه السنة للشيخ سيد سابق، من أشهر كتب الفقه المقارن المعاصرة.</p>
+            <div class="tags">
+                <span class="tag">الفقه</span>
+                <span class="tag">سيد سابق</span>
+            </div>
+            <a href="https://example.com/lecture8" target="_blank" rel="noopener noreferrer">
+                🎧 استمع للمحاضرة
+            </a>
+        </div>
+
     </div>
 
-    <!-- مثال 2 -->
-    <div class="lecture-card">
-        <h4>📖 عنوان المحاضرة الثانية</h4>
-        <p>وصف مختصر للمحاضرة — مثلاً: شرح متن العقيدة الطحاوية، الدرس الخامس.</p>
-        <div class="tags">
-            <span class="tag">العقيدة</span>
-            <span class="tag">الطحاوية</span>
-        </div>
-        <a href="https://example.com/lecture2" target="_blank" rel="noopener noreferrer">
-            🎧 استمع للمحاضرة
-        </a>
+    <!-- رسالة عند عدم وجود نتائج -->
+    <div class="no-results" id="noResults">
+        😕 لم يُعثر على نتائج مطابقة لبحثك.<br>
+        جرّب كلمات أخرى مثل: <em>عقيدة، فقه، حديث، تفسير، ابن تيمية، النووي...</em><br>
+        أو اختر تصنيفاً مختلفاً من الأزرار أعلاه.
     </div>
-
-    <!-- مثال 3 -->
-    <div class="lecture-card">
-        <h4>📖 عنوان المحاضرة الثالثة</h4>
-        <p>وصف مختصر للمحاضرة — مثلاً: شرح كتاب زاد المستقنع في فقه الحنابلة، الدرس العاشر.</p>
-        <div class="tags">
-            <span class="tag">الفقه</span>
-            <span class="tag">الحنابلة</span>
-        </div>
-        <a href="https://example.com/lecture3" target="_blank" rel="noopener noreferrer">
-            🎧 استمع للمحاضرة
-        </a>
-    </div>
-
-    <!-- ═══════════════════════════════════════ -->
-    <!-- نموذج بسيط لإضافة محاضرة جديدة -->
-    <!-- ═══════════════════════════════════════ -->
-    <!-- 
-    انسخ الكود التالي وألصقه قبل </div> الأخير:
-    
-    <div class="lecture-card">
-        <h4>📖 عنوان المحاضرة</h4>
-        <p>وصف المحاضرة هنا.</p>
-        <div class="tags">
-            <span class="tag">التصنيف</span>
-        </div>
-        <a href="رابط-المحاضرة" target="_blank" rel="noopener noreferrer">
-            🎧 استمع للمحاضرة
-        </a>
-    </div>
-    -->
 
     <hr>
 
@@ -293,6 +513,108 @@
     <p style="text-align:center;">
         <a href="index.html">⬅ العودة إلى الصفحة الرئيسية</a>
     </p>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- JavaScript للبحث والتصفية -->
+    <!-- ═══════════════════════════════════════ -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const searchStats = document.getElementById('searchStats');
+        const noResults = document.getElementById('noResults');
+        const lectures = document.querySelectorAll('.lecture-card');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // ═══════════════════════════════════════
+        // البحث
+        // ═══════════════════════════════════════
+        searchInput.addEventListener('input', function() {
+            clearBtn.style.display = this.value.length > 0 ? 'block' : 'none';
+            currentSearch = this.value.trim().toLowerCase();
+            applyFilters();
+        });
+
+        function clearSearch() {
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            currentSearch = '';
+            applyFilters();
+            searchInput.focus();
+        }
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clearSearch();
+            }
+        });
+
+        // ═══════════════════════════════════════
+        // التصفية
+        // ═══════════════════════════════════════
+        function setFilter(category) {
+            currentFilter = category;
+            
+            // تحديث حالة الأزرار
+            filterBtns.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            applyFilters();
+        }
+
+        // ═══════════════════════════════════════
+        // تطبيق البحث + التصفية معاً
+        // ═══════════════════════════════════════
+        function applyFilters() {
+            let visibleCount = 0;
+
+            lectures.forEach(card => {
+                const searchData = card.getAttribute('data-search').toLowerCase();
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.toLowerCase()).join(' ');
+                const category = card.getAttribute('data-category');
+
+                // التحقق من التصفية
+                const filterMatch = currentFilter === 'all' || category === currentFilter;
+
+                // التحقق من البحث
+                const searchMatch = currentSearch === '' || 
+                                    searchData.includes(currentSearch) || 
+                                    title.includes(currentSearch) || 
+                                    desc.includes(currentSearch) || 
+                                    tags.includes(currentSearch);
+
+                if (filterMatch && searchMatch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // عرض الإحصائيات
+            if (currentSearch !== '' || currentFilter !== 'all') {
+                if (visibleCount > 0) {
+                    searchStats.innerHTML = `تم العثور على <span>${visibleCount}</span> نتيجة`;
+                    noResults.classList.remove('show');
+                } else {
+                    searchStats.innerHTML = '';
+                    noResults.classList.add('show');
+                }
+            } else {
+                searchStats.innerHTML = '';
+                noResults.classList.remove('show');
+            }
+        }
+    </script>
 
 </body>
 
