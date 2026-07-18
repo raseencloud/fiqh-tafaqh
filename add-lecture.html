@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة محاضرة جديدة</title>
+
+    <style>
+        body{
+            font-family:Tahoma,Arial,sans-serif;
+            background:#f5f7fa;
+            margin:0;
+            padding:30px;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:12px;
+            box-shadow:0 5px 20px rgba(0,0,0,.1);
+        }
+
+        h1{
+            text-align:center;
+            color:#0f4c81;
+        }
+
+        label{
+            display:block;
+            margin-top:18px;
+            font-weight:bold;
+        }
+
+        input,
+        textarea,
+        select{
+            width:100%;
+            padding:12px;
+            margin-top:6px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+            box-sizing:border-box;
+        }
+
+        textarea{
+            min-height:120px;
+        }
+
+        button{
+            margin-top:25px;
+            background:#0f4c81;
+            color:white;
+            border:none;
+            padding:14px 30px;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#0a3558;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎓 إضافة محاضرة جديدة</h1>
+
+<label for="title">عنوان المحاضرة</label>
+<input type="text" id="title">
+
+<label for="speaker">اسم الشيخ</label>
+<input type="text" id="speaker">
+
+<label for="category">التصنيف</label>
+
+<select id="category">
+    <option value="">اختر التصنيف</option>
+    <option>العقيدة</option>
+    <option>الفقه</option>
+    <option>التفسير</option>
+    <option>الحديث</option>
+    <option>السيرة</option>
+    <option>الأخلاق</option>
+</select>
+
+<label for="audio">رابط الصوت</label>
+<input type="url" id="audio">
+
+<label for="youtube">رابط اليوتيوب (اختياري)</label>
+<input type="url" id="youtube">
+
+<label for="description">وصف المحاضرة</label>
+<textarea id="description"></textarea>
+
+<button id="saveBtn">
+💾 حفظ المحاضرة
+</button>
+
+</div>
+
+<script src="assets/js/add-lecture.js"></script>
+
+</body>
+</html>
