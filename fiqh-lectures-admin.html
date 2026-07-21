@@ -455,10 +455,15 @@
   }
   .lm-link-youtube:hover { background: #ef4444; color: #fff; }
   .lm-lecture-item .actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.lm-lecture-item .actions button {
+  flex: none;
+  white-space: nowrap;
+}
   .lm-lecture-item .actions button {
     padding: 8px 16px;
     border-radius: 10px;
