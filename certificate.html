@@ -581,11 +581,32 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
 (function() {
     "use strict";
 
+    // ========== حماية الشهادة ==========
+    const passed = localStorage.getItem("fiqh_cert_passed");
+    const savedId = localStorage.getItem("fiqh_cert_id");
+    const urlId = new URLSearchParams(window.location.search).get("id");
+
+    if (passed !== "true" || savedId !== urlId) {
+        document.body.innerHTML = `
+            <div style="text-align:center;padding:80px 20px;font-family:Cairo,sans-serif;">
+                <h2 style="color:#c0392b;font-size:28px;">⛔ وصول مرفوض</h2>
+                <p style="color:#666;font-size:16px;margin:20px 0;">
+                    يجب اجتياز الاختبار أولاً للحصول على الشهادة.
+                </p>
+                <a href="training.html" style="display:inline-block;background:#8B6914;color:#fff;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:700;">
+                    ابدأ الاختبار الآن →
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    // ========== باقي الكود الأصلي ==========
     const params = new URLSearchParams(window.location.search);
-    const name  = params.get("name")  || "أحمد محمد عبدالله";
-    const score = parseInt(params.get("score") || "95", 10);
-    const total = parseInt(params.get("total") || "100", 10);
-    const id    = params.get("id")    || "IFA-73548767";
+    const name  = params.get("name")  || localStorage.getItem("fiqh_cert_name") || "أحمد محمد عبدالله";
+    const score = parseInt(params.get("score") || localStorage.getItem("fiqh_cert_score") || "95", 10);
+    const total = parseInt(params.get("total") || localStorage.getItem("fiqh_cert_total") || "100", 10);
+    const id    = params.get("id")    || savedId || "IFA-73548767";
 
     const percent = Math.round((score / total) * 100);
 

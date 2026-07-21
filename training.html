@@ -353,6 +353,7 @@ button:disabled{
 }
 </style>
 <base target="_self">
+<base target="_blank">
 </head>
 
 <body>
@@ -949,14 +950,19 @@ function printCertificate(){
     const certId = "FIQH-" + Date.now();
     const percent = Math.round((score / questions.length) * 100);
 
-    // بناء رابط الشهادة مع البيانات
+    // ✅ احفظ في localStorage أولاً
+    localStorage.setItem("fiqh_cert_passed", "true");
+    localStorage.setItem("fiqh_cert_score", score);
+    localStorage.setItem("fiqh_cert_total", questions.length);
+    localStorage.setItem("fiqh_cert_id", certId);
+    localStorage.setItem("fiqh_cert_name", candidateName);
+
     const certUrl = 'certificate.html' +
         '?name=' + encodeURIComponent(candidateName) +
         '&score=' + score +
         '&total=' + questions.length +
         '&id=' + certId;
 
-    // فتح الشهادة في تبويب جديد
     window.open(certUrl, '_blank');
 }
 
@@ -970,7 +976,7 @@ function esc(t){
 }
 
 function escJS(s){
-    return "'" + s.replace(/'/g, "\'") + "'";
+    return "'" + s.replace(/'/g, "'") + "'";
 }
 
 function toast(msg, tp){
@@ -982,5 +988,6 @@ function toast(msg, tp){
     setTimeout(() => d.remove(), 3500);
 }
 </script>
+
 </body>
 </html>
